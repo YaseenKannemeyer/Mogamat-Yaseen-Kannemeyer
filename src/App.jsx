@@ -5,26 +5,18 @@ import About from "./sections/About.jsx";
 import Projects from "./sections/Projects.jsx";
 import Contact from "./sections/Contact.jsx";
 
-
-
-
 const App = () => {
-  return <div className="container mx-auto max-w-7xl">
+  return (
+    <div>
+      <Navbar />
+      <Hero />
+      <Projects />
+      <About />
+      <Contact />
 
-    <Navbar />
-    <Hero />
-    <Projects/>
-    <About/>
-    <Contact/>
- 
-
-     
-      
-    {/* This is a single-line comment within JSX */}
-
-
-
-  </div>;
+      {/* This is a single-line comment within JSX */}
+    </div>
+  );
 };
 
 export default App;

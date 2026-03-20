@@ -9,10 +9,10 @@ export const BackgroundWrapper = ({
 }) => {
   return (
     <div className="relative min-h-screen w-full bg-neutral-950 overflow-hidden">
-      <div className="relative z-10 flex justify-center items-center p-10">
+      <BackgroundBeams className=" absolute inset-0 w-full h-full" />
+      <div className="relative z-10 flex justify-center items-start p-10">
         {children}
       </div>
-      <BackgroundBeams />
     </div>
   );
-}
+};
