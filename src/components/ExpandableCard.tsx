@@ -140,7 +140,7 @@ export function ExpandableCard({
       {/* Expanded Card */}
       <AnimatePresence>
         {active && (
-          <div className="fixed inset-0 grid place-items-center z-[100]">
+          <div className="fixed inset-0 grid place-items-center z-100">
             <motion.div
               layoutId={`card-${active.title}-${id}`}
               ref={ref}

@@ -176,7 +176,7 @@ const ParticleCard: React.FC<{
         duration: 0.3,
         ease: "back.in(1.7)",
         onComplete: () => {
-          p.remove();
+          p.parentNode?.removeChild(p);
         },
       });
     });
@@ -656,20 +656,62 @@ const MagicBento: React.FC<BentoProps> = ({
           color: var(--text-muted);
           line-height: 1.62;
           margin: 0;
-          /* 3 lines max on small cards */
-          display: -webkit-box;
-          -webkit-box-orient: vertical;
-          -webkit-line-clamp: 3;
-          overflow: hidden;
+          /* No global clamp — let desktop media query handle per-slot */
         }
 
-        /* Hero: show full description */
+        /* Hero card */
         .bento-grid .card:nth-child(1) .bc-desc {
-          -webkit-line-clamp: unset;
-          overflow: visible;
           font-size: clamp(0.78rem, 1vw, 0.9rem);
           color: rgba(255,255,255,0.62);
           line-height: 1.65;
+        }
+
+        /* Desktop: per-slot line budgets based on actual card height/width */
+        @media (min-width: 1024px) {
+          /* Row 1 half-height cards — wide enough for 4 lines */
+          .bento-grid .card:nth-child(2) .bc-desc {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 4;
+            overflow: hidden;
+          }
+          /* Row 1, narrow card — smaller font, 4 lines */
+          .bento-grid .card:nth-child(3) .bc-desc {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 4;
+            overflow: hidden;
+            font-size: clamp(0.64rem, 0.8vw, 0.76rem);
+          }
+          /* Row 2 medium card */
+          .bento-grid .card:nth-child(4) .bc-desc {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 4;
+            overflow: hidden;
+          }
+          /* Row 2 narrow cards — smaller font so text fits */
+          .bento-grid .card:nth-child(5) .bc-desc,
+          .bento-grid .card:nth-child(6) .bc-desc {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 4;
+            overflow: hidden;
+            font-size: clamp(0.62rem, 0.78vw, 0.74rem);
+          }
+        }
+
+        /* Mobile/tablet: natural 3-line clamp */
+        @media (max-width: 1023px) {
+          .bc-desc {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 3;
+            overflow: hidden;
+          }
+          .bento-grid .card:nth-child(1) .bc-desc {
+            -webkit-line-clamp: 4;
+          }
         }
 
         /* ── Tech badges ── */
