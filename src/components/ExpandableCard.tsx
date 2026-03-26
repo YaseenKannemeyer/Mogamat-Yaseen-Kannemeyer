@@ -4,6 +4,23 @@ import React, { useEffect, useId, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useOutsideClick } from "../hooks/use-outside-click";
 
+const CloseIcon = () => (
+  <svg
+    className="w-5 h-5"
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M6 18L18 6M6 6l12 12"
+    />
+  </svg>
+);
+
 const cards = [
   {
     description: "Next.js • Framer Motion • TypeScript",
@@ -97,6 +114,7 @@ export function ExpandableCard({
   activeTag?: string;
 }) {
   const [active, setActive] = useState<Card | null>(null);
+  const [showAll, setShowAll] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const id = useId();
 
@@ -108,15 +126,14 @@ export function ExpandableCard({
     return matchesSearch && matchesTag;
   });
 
+  const visibleCards = showAll ? filtered : filtered.slice(0, 5);
+
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") setActive(null);
     };
-    if (active) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
-    }
+    if (active) document.body.style.overflow = "hidden";
+    else document.body.style.overflow = "auto";
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [active]);
@@ -185,7 +202,6 @@ export function ExpandableCard({
                     </motion.p>
                   </div>
 
-                  {/* Expanded card buttons — both shown independently, no layoutId */}
                   <div className="flex flex-col gap-2 items-end">
                     {active.ctaLink && (
                       <a
@@ -237,10 +253,10 @@ export function ExpandableCard({
           </p>
         ) : (
           <>
-            {filtered.map(function (card) {
-              return (
+            <AnimatePresence>
+              {visibleCards.map((card) => (
                 <motion.li
-                  layoutId={`card-${card.title}-${id}`}
+                  layout
                   key={`card-${card.title}-${id}`}
                   onClick={() => setActive(card)}
                   className="p-4 flex flex-col md:flex-row justify-between items-center hover:bg-neutral-50 dark:hover:bg-neutral-800 rounded-xl cursor-pointer"
@@ -271,8 +287,6 @@ export function ExpandableCard({
                     </div>
                   </div>
 
-                  {/* List card button — just shows ctaText, no layoutId */}
-                  {/* List card button — real links with matching colors */}
                   <div
                     className="flex gap-2 mt-4 md:mt-0"
                     onClick={(e) => e.stopPropagation()}
@@ -299,33 +313,25 @@ export function ExpandableCard({
                     )}
                   </div>
                 </motion.li>
-              );
-            })}
+              ))}
+            </AnimatePresence>
+            {/* View All Button */}
+            {filtered.length > 5 && !showAll && (
+              <div className="flex justify-center mt-4">
+                <motion.button
+                  layout
+                  className="px-6 py-2 bg-blue-500 text-white rounded-full font-bold hover:bg-blue-600 transition-colors"
+                  onClick={() => setShowAll(true)}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  View All
+                </motion.button>
+              </div>
+            )}
           </>
         )}
       </ul>
     </>
   );
 }
-
-export const CloseIcon = () => (
-  <motion.svg
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
-    exit={{ opacity: 0, transition: { duration: 0.05 } }}
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className="h-4 w-4 text-black"
-  >
-    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-    <path d="M18 6l-12 12" />
-    <path d="M6 6l12 12" />
-  </motion.svg>
-);

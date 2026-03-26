@@ -24,7 +24,7 @@ export interface BentoProps {
 
 const DEFAULT_PARTICLE_COUNT = 12;
 const DEFAULT_SPOTLIGHT_RADIUS = 300;
-const DEFAULT_GLOW_COLOR = "132, 0, 255";
+const DEFAULT_GLOW_COLOR = "59, 130, 246"; // blue-500
 const MOBILE_BREAKPOINT = 768;
 
 const cardData: BentoCardProps[] = [
@@ -499,7 +499,7 @@ const MagicBento: React.FC<BentoProps> = ({
           --glow-y: 50%;
           --glow-intensity: 0;
           --glow-radius: 200px;
-          --border-col: rgba(80, 40, 120, 0.45);
+          --border-col: rgba(59,130,246,0.45);
           --bg-dark: #060010;
           --radius: clamp(14px, 1.6vw, 22px);
           --text-muted: rgba(255,255,255,0.52);
@@ -560,7 +560,7 @@ const MagicBento: React.FC<BentoProps> = ({
           border-radius: var(--radius);
           border: 1px solid var(--border-col);
           background: var(--bg-dark);
-          background-image: radial-gradient(ellipse at 75% 15%, rgba(132,0,255,0.07) 0%, transparent 55%);
+          background-image: radial-gradient(ellipse at 75% 15%, rgba(59,130,246,0.07) 0%, transparent 55%);
           color: #fff;
           display: flex;
           flex-direction: column;
@@ -727,13 +727,13 @@ const MagicBento: React.FC<BentoProps> = ({
           letter-spacing: 0.04em;
           padding: 0.18rem 0.5rem;
           border-radius: 999px;
-          background: rgba(132,0,255,0.14);
-          border: 1px solid rgba(132,0,255,0.28);
-          color: rgba(195,155,255,0.9);
+         background: rgba(59,130,246,0.14);
+  border: 1px solid rgba(59,130,246,0.28);
+  color: rgba(59,145,246,0.9);
           white-space: nowrap;
           transition: background 0.2s, border-color 0.2s;
         }
-        .bc-badge:hover { background: rgba(132,0,255,0.26); border-color: rgba(132,0,255,0.5); }
+        .bc-badge:hover { background: rgba(59,130,246,0.26); border-color: rgba(59,130,246,0.5); }
 
         /* ── CTA ── */
         .bc-cta {
@@ -741,12 +741,13 @@ const MagicBento: React.FC<BentoProps> = ({
           margin-top: 0.5rem;
           font-size: clamp(0.68rem, 0.85vw, 0.78rem);
           font-weight: 600;
-          color: rgba(175,125,255,0.9);
+            color: rgba(59,145,246,0.9);
+
           text-decoration: none;
           letter-spacing: 0.04em;
           transition: color 0.2s, letter-spacing 0.2s;
         }
-        .bc-cta:hover { color: #fff; letter-spacing: 0.09em; }
+        .bc-cta:hover { color: #3b82f6; letter-spacing: 0.09em; }
 
         /* ── Particles ── */
         .particle::before {

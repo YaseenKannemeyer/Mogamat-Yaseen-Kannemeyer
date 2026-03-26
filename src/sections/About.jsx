@@ -1,13 +1,28 @@
+"use client";
+
+import { useState } from "react";
 import MagicBento from "../components/MagicBento";
 
 const About = () => {
+  const [active, setActive] = useState(false);
+
   return (
     <section
       className="flex items-start justify-center
          md:items-start md:justify-center
-        min-h-screen overflow:hidden pt-20 c-space"
+        min-h-screen overflow-hidden pt-20 c-space"
     >
-      <MagicBento spotlightRadius={300} enableTilt enableMagnetism />
+      <div
+        className="will-change-transform transform-gpu"
+        onMouseEnter={() => setActive(true)}
+        onMouseLeave={() => setActive(false)}
+      >
+        <MagicBento
+          spotlightRadius={0.5}
+          enableTilt={false}
+          enableMagnetism={false}
+        />
+      </div>
     </section>
   );
 };

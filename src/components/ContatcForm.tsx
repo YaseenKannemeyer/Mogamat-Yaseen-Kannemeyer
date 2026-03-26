@@ -106,7 +106,7 @@ const ToolbarButton = ({
     className={cn(
       "flex items-center justify-center rounded px-2 py-1.5 transition-all duration-150",
       active
-        ? "bg-amber-500/20 text-amber-400 ring-1 ring-inset ring-amber-500/30"
+        ? "bg-blue-500/20 text-blue-500 ring-1 ring-inset ring-blue-500/30"
         : "text-neutral-400 hover:bg-white/6 hover:text-neutral-200",
     )}
   >
@@ -234,7 +234,7 @@ const htmlToPlainText = (html: string) => {
 };
 
 const inputCls =
-  "w-full rounded-lg border border-white/10 bg-white/5 px-3.5 py-2.5 text-sm text-neutral-100 placeholder-neutral-600 outline-none transition-all duration-200 focus:border-amber-500/40 focus:bg-white/[0.07] focus:ring-2 focus:ring-amber-500/10";
+  "w-full rounded-lg border border-white/10 bg-white/5 px-3.5 py-2.5 text-sm text-neutral-100 placeholder-neutral-600 outline-none transition-all duration-200 focus:border-blue-500/40 focus:bg-white/[0.07] focus:ring-2 focus:ring-blue-500/10";
 
 const Field = ({
   label,
@@ -314,12 +314,12 @@ export function ContactForm() {
   return (
     <div className="relative mx-auto w-full max-w-xl overflow-hidden rounded-2xl border border-white/8 bg-[#0d0d0d] shadow-2xl shadow-black/70">
       {/* Ambient top glow */}
-      <div className="pointer-events-none absolute -top-24 left-1/2 h-48 w-72 -translate-x-1/2 rounded-full bg-amber-500/8 blur-3xl" />
+      <div className="pointer-events-none absolute -top-24 left-1/2 h-48 w-72 -translate-x-1/2 rounded-full bg-blue-500/8 blur-3xl" />
 
       {/* Header */}
       <div className="relative flex items-start justify-between border-b border-white/[0.07] px-7 py-6">
         <div>
-          <p className="mb-1 text-[10px] font-bold uppercase tracking-[0.22em] text-amber-500/80">
+          <p className="mb-1 text-[10px] font-bold uppercase tracking-[0.22em] text-blue-500/80">
             Get in touch
           </p>
           <h2 className="text-[22px] font-light tracking-tight text-white">
@@ -390,7 +390,7 @@ export function ContactForm() {
 
         {/* Rich-text editor */}
         <Field label="Message">
-          <div className="overflow-hidden rounded-lg border border-white/10 bg-white/5 transition-all duration-200 focus-within:border-amber-500/40 focus-within:ring-2 focus-within:ring-amber-500/10">
+          <div className="overflow-hidden rounded-lg border border-white/10 bg-white/5 transition-all duration-200 focus-within:border-blue-500/40 focus-within:ring-2 focus-within:ring-blue-500/10">
             <EditorToolbar editor={editor} />
             <EditorContent editor={editor} />
           </div>
@@ -406,7 +406,7 @@ export function ContactForm() {
               ? "bg-emerald-600 text-white"
               : sent === "error"
                 ? "bg-red-600/80 text-white"
-                : "bg-amber-500 text-black hover:bg-amber-400",
+                : "bg-blue-500 text-black hover:bg-blue-400",
           )}
         >
           {sent === "idle" && (
