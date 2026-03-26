@@ -301,12 +301,12 @@ export function ContactForm() {
           type="submit"
           disabled={sent === "sending" || sent === "done"}
           className={cn(
-            "group/btn relative flex h-11 w-full items-center justify-center gap-2 rounded-md font-medium text-white transition-all",
+            "group/btn relative flex h-11 w-full items-center justify-center gap-2 rounded-md font-medium text-black transition-all",
             sent === "done"
               ? "bg-green-600"
               : sent === "error"
                 ? "bg-red-600"
-                : "bg-gradient-to-br from-black to-neutral-600 dark:from-zinc-800 dark:to-zinc-900",
+                : "bg-linear-to-br from-black to-neutral-600 dark:from-zinc-800 dark:to-zinc-900",
             "shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset]",
           )}
         >
@@ -326,7 +326,7 @@ export function ContactForm() {
         </button>
 
         {/* Divider */}
-        <div className="h-px w-full bg-gradient-to-r from-transparent via-neutral-300 to-transparent dark:via-neutral-700" />
+        <div className="h-px w-full bg-linear-to-r from-transparent via-neutral-300 to-transparent dark:via-neutral-700" />
 
         {/* Send-to indicator */}
         <div className="flex items-center gap-2 text-sm text-neutral-500 dark:text-neutral-400">
@@ -342,8 +342,8 @@ export function ContactForm() {
 
 const BottomGradient = () => (
   <>
-    <span className="absolute inset-x-0 -bottom-px block h-px w-full bg-gradient-to-r from-transparent via-cyan-500 to-transparent opacity-0 transition duration-500 group-hover/btn:opacity-100" />
-    <span className="absolute inset-x-10 -bottom-px mx-auto block h-px w-1/2 bg-gradient-to-r from-transparent via-indigo-500 to-transparent opacity-0 blur-sm transition duration-500 group-hover/btn:opacity-100" />
+    <span className="absolute inset-x-0 -bottom-px block h-px w-full bg-linear-to-r from-transparent via-cyan-500 to-transparent opacity-0 transition duration-500 group-hover/btn:opacity-100" />
+    <span className="absolute inset-x-10 -bottom-px mx-auto block h-px w-1/2 bg-linear-to-r from-transparent via-indigo-500 to-transparent opacity-0 blur-sm transition duration-500 group-hover/btn:opacity-100" />
   </>
 );
 
