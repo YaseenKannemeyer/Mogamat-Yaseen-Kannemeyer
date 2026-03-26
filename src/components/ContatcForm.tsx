@@ -30,7 +30,7 @@ import {
 const SOCIALS = [
   {
     label: "WhatsApp",
-    href: "https://wa.me/27839253595",
+    href: "https://wa.link/ekk8rw",
     color: "hover:text-green-400",
     icon: (
       <svg
@@ -44,7 +44,7 @@ const SOCIALS = [
   },
   {
     label: "GitHub",
-    href: "https://github.com/yourusername",
+    href: "https://github.com/YaseenKannemeyer",
     color: "hover:text-white",
     icon: (
       <svg
@@ -58,7 +58,7 @@ const SOCIALS = [
   },
   {
     label: "LinkedIn",
-    href: "https://linkedin.com/in/yourusername",
+    href: "https://www.linkedin.com/in/yaseen-kannemeyer",
     color: "hover:text-blue-400",
     icon: (
       <svg
@@ -72,7 +72,7 @@ const SOCIALS = [
   },
   {
     label: "Instagram",
-    href: "https://instagram.com/yourusername",
+    href: "https://www.instagram.com/yaseenkannemeyer",
     color: "hover:text-pink-400",
     icon: (
       <svg
