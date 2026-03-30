@@ -1,12 +1,13 @@
+"use client";
+
 import { Renderer, Program, Mesh, Color, Triangle } from "ogl";
 import { useEffect, useRef, useState } from "react";
 
+// ─── Shaders are module-level constants — never recreated ───────────────────
 const vertexShader = `
 attribute vec2 uv;
 attribute vec2 position;
-
 varying vec2 vUv;
-
 void main() {
   vUv = uv;
   gl_Position = vec4(position, 0, 1);
@@ -14,7 +15,7 @@ void main() {
 `;
 
 const fragmentShader = `
-precision highp float;
+precision mediump float;
 
 uniform float uTime;
 uniform vec3 uResolution;
@@ -39,7 +40,7 @@ varying vec2 vUv;
 
 #define NUM_LAYER 4.0
 #define STAR_COLOR_CUTOFF 0.2
-#define MAT45 mat2(0.7071, -0.7071, 0.7071, 0.7071)
+#define MAT45 mat2(0.7071,-0.7071,0.7071,0.7071)
 #define PERIOD 3.0
 
 float Hash21(vec2 p) {
@@ -48,22 +49,18 @@ float Hash21(vec2 p) {
   return fract(p.x * p.y);
 }
 
-float tri(float x) {
-  return abs(fract(x) * 2.0 - 1.0);
-}
+float tri(float x) { return abs(fract(x) * 2.0 - 1.0); }
 
 float tris(float x) {
-  float t = fract(x);
-  return 1.0 - smoothstep(0.0, 1.0, abs(2.0 * t - 1.0));
+  return 1.0 - smoothstep(0.0, 1.0, abs(2.0 * fract(x) - 1.0));
 }
 
 float trisn(float x) {
-  float t = fract(x);
-  return 2.0 * (1.0 - smoothstep(0.0, 1.0, abs(2.0 * t - 1.0))) - 1.0;
+  return 2.0 * (1.0 - smoothstep(0.0, 1.0, abs(2.0 * fract(x) - 1.0))) - 1.0;
 }
 
 vec3 hsv2rgb(vec3 c) {
-  vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
+  vec4 K = vec4(1.0, 2.0/3.0, 1.0/3.0, 3.0);
   vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
   return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
 }
@@ -82,14 +79,13 @@ float Star(vec2 uv, float flare) {
 
 vec3 StarLayer(vec2 uv) {
   vec3 col = vec3(0.0);
-
-  vec2 gv = fract(uv) - 0.5; 
+  vec2 gv = fract(uv) - 0.5;
   vec2 id = floor(uv);
 
   for (int y = -1; y <= 1; y++) {
     for (int x = -1; x <= 1; x++) {
       vec2 offset = vec2(float(x), float(y));
-      vec2 si = id + vec2(float(x), float(y));
+      vec2 si = id + offset;
       float seed = Hash21(si);
       float size = fract(seed * 345.32);
       float glossLocal = tri(uStarSpeed / (PERIOD * seed + 1.0));
@@ -99,26 +95,24 @@ vec3 StarLayer(vec2 uv) {
       float blu = smoothstep(STAR_COLOR_CUTOFF, 1.0, Hash21(si + 3.0)) + STAR_COLOR_CUTOFF;
       float grn = min(red, blu) * seed;
       vec3 base = vec3(red, grn, blu);
-      
+
       float hue = atan(base.g - base.r, base.b - base.r) / (2.0 * 3.14159) + 0.5;
       hue = fract(hue + uHueShift / 360.0);
       float sat = length(base - vec3(dot(base, vec3(0.299, 0.587, 0.114)))) * uSaturation;
       float val = max(max(base.r, base.g), base.b);
       base = hsv2rgb(vec3(hue, sat, val));
 
-      vec2 pad = vec2(tris(seed * 34.0 + uTime * uSpeed / 10.0), tris(seed * 38.0 + uTime * uSpeed / 30.0)) - 0.5;
+      vec2 pad = vec2(
+        tris(seed * 34.0 + uTime * uSpeed / 10.0),
+        tris(seed * 38.0 + uTime * uSpeed / 30.0)
+      ) - 0.5;
 
       float star = Star(gv - offset - pad, flareSize);
-      vec3 color = base;
-
       float twinkle = trisn(uTime * uSpeed + seed * 6.2831) * 0.5 + 1.0;
-      twinkle = mix(1.0, twinkle, uTwinkleIntensity);
-      star *= twinkle;
-      
-      col += star * size * color;
+      star *= mix(1.0, twinkle, uTwinkleIntensity);
+      col += star * size * base;
     }
   }
-
   return col;
 }
 
@@ -126,31 +120,22 @@ void main() {
   vec2 focalPx = uFocal * uResolution.xy;
   vec2 uv = (vUv * uResolution.xy - focalPx) / uResolution.y;
 
-  vec2 mouseNorm = uMouse - vec2(0.5);
-  
   if (uAutoCenterRepulsion > 0.0) {
-    vec2 centerUV = vec2(0.0, 0.0);
-    float centerDist = length(uv - centerUV);
-    vec2 repulsion = normalize(uv - centerUV) * (uAutoCenterRepulsion / (centerDist + 0.1));
-    uv += repulsion * 0.05;
+    float centerDist = length(uv);
+    uv += normalize(uv) * (uAutoCenterRepulsion / (centerDist + 0.1)) * 0.05;
   } else if (uMouseRepulsion) {
     vec2 mousePosUV = (uMouse * uResolution.xy - focalPx) / uResolution.y;
     float mouseDist = length(uv - mousePosUV);
-    vec2 repulsion = normalize(uv - mousePosUV) * (uRepulsionStrength / (mouseDist + 0.1));
-    uv += repulsion * 0.05 * uMouseActiveFactor;
+    uv += normalize(uv - mousePosUV) * (uRepulsionStrength / (mouseDist + 0.1)) * 0.05 * uMouseActiveFactor;
   } else {
-    vec2 mouseOffset = mouseNorm * 0.1 * uMouseActiveFactor;
-    uv += mouseOffset;
+    uv += (uMouse - vec2(0.5)) * 0.1 * uMouseActiveFactor;
   }
 
-  float autoRotAngle = uTime * uRotationSpeed;
-  mat2 autoRot = mat2(cos(autoRotAngle), -sin(autoRotAngle), sin(autoRotAngle), cos(autoRotAngle));
-  uv = autoRot * uv;
-
+  float a = uTime * uRotationSpeed;
+  uv = mat2(cos(a), -sin(a), sin(a), cos(a)) * uv;
   uv = mat2(uRotation.x, -uRotation.y, uRotation.y, uRotation.x) * uv;
 
   vec3 col = vec3(0.0);
-
   for (float i = 0.0; i < 1.0; i += 1.0 / NUM_LAYER) {
     float depth = fract(i + uStarSpeed * uSpeed);
     float scale = mix(20.0 * uDensity, 0.5 * uDensity, depth);
@@ -159,10 +144,8 @@ void main() {
   }
 
   if (uTransparent) {
-    float alpha = length(col);
-    alpha = smoothstep(0.0, 0.3, alpha);
-    alpha = min(alpha, 1.0);
-    gl_FragColor = vec4(col, alpha);
+    float alpha = smoothstep(0.0, 0.3, length(col));
+    gl_FragColor = vec4(col, min(alpha, 1.0));
   } else {
     gl_FragColor = vec4(col, 1.0);
   }
@@ -170,7 +153,7 @@ void main() {
 `;
 
 interface GalaxyProps {
-  children?: React.ReactNode;
+  className?: string;
   focal?: [number, number];
   rotation?: [number, number];
   starSpeed?: number;
@@ -189,22 +172,13 @@ interface GalaxyProps {
   transparent?: boolean;
 }
 
-function useIsMobile(breakpoint = 768) {
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const mq = window.matchMedia(`(max-width: ${breakpoint}px)`);
-    setIsMobile(mq.matches);
-    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
-    mq.addEventListener("change", handler);
-    return () => mq.removeEventListener("change", handler);
-  }, [breakpoint]);
-
-  return isMobile;
-}
+// Reusable shared Float32Arrays — avoids per-frame heap allocations
+const MOUSE_BUF = new Float32Array([0.5, 0.5]);
+const FOCAL_DEFAULT = new Float32Array([0.5, 0.5]);
+const ROT_DEFAULT = new Float32Array([1.0, 0.0]);
 
 export default function Galaxy({
-  children,
+  className,
   focal = [0.5, 0.5],
   rotation = [1.0, 0.0],
   starSpeed = 0.5,
@@ -221,24 +195,101 @@ export default function Galaxy({
   rotationSpeed = 0.1,
   autoCenterRepulsion = 0,
   transparent = true,
-  ...rest
 }: GalaxyProps) {
-  const isMobile = useIsMobile();
-  const ctnDom = useRef<HTMLDivElement>(null);
-  const targetMousePos = useRef({ x: 0.5, y: 0.5 });
-  const smoothMousePos = useRef({ x: 0.5, y: 0.5 });
-  const targetMouseActive = useRef(0.0);
-  const smoothMouseActive = useRef(0.0);
+  const [isMobile, setIsMobile] = useState(false);
+  const ctnRef = useRef<HTMLDivElement>(null);
+  const targetMouse = useRef({ x: 0.5, y: 0.5 });
+  const smoothMouse = useRef({ x: 0.5, y: 0.5 });
+  const targetActive = useRef(0.0);
+  const smoothActive = useRef(0.0);
+
+  // Stable prop refs — avoids restarting the WebGL context when props change
+  const propsRef = useRef({
+    starSpeed,
+    density,
+    hueShift,
+    speed,
+    glowIntensity,
+    saturation,
+    mouseRepulsion,
+    twinkleIntensity,
+    rotationSpeed,
+    repulsionStrength,
+    autoCenterRepulsion,
+    transparent,
+    disableAnimation,
+    mouseInteraction,
+    focal,
+    rotation,
+  });
+  useEffect(() => {
+    propsRef.current = {
+      starSpeed,
+      density,
+      hueShift,
+      speed,
+      glowIntensity,
+      saturation,
+      mouseRepulsion,
+      twinkleIntensity,
+      rotationSpeed,
+      repulsionStrength,
+      autoCenterRepulsion,
+      transparent,
+      disableAnimation,
+      mouseInteraction,
+      focal,
+      rotation,
+    };
+  });
+
+  // Mobile detection
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 768px)");
+    setIsMobile(mq.matches);
+    const h = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mq.addEventListener("change", h);
+    return () => mq.removeEventListener("change", h);
+  }, []);
 
   useEffect(() => {
-    // Skip WebGL entirely on mobile — saves GPU/CPU and prevents jank
-    if (isMobile) return;
-    if (!ctnDom.current) return;
+    if (isMobile || !ctnRef.current) return;
+    const ctn = ctnRef.current;
 
-    const ctn = ctnDom.current;
+    let cleanup: (() => void) | null = null;
+
+    // Don't spin up WebGL until the section is actually on screen.
+    // threshold:0 fires as soon as 1px is visible; rootMargin pre-loads
+    // 200px before the section enters the viewport so there's no cold-start flash.
+    const io = new IntersectionObserver(
+      (entries) => {
+        const visible = entries[0].isIntersecting;
+        if (visible && !cleanup) {
+          cleanup = startGL(ctn);
+        } else if (!visible && cleanup) {
+          cleanup();
+          cleanup = null;
+        }
+      },
+      { rootMargin: "200px 0px", threshold: 0 },
+    );
+    io.observe(ctn);
+
+    return () => {
+      io.disconnect();
+      cleanup?.();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isMobile, transparent]);
+
+  // All WebGL setup extracted into a plain function so IntersectionObserver
+  // can call it lazily and the cleanup returned from useEffect stays simple.
+  function startGL(ctn: HTMLDivElement) {
     const renderer = new Renderer({
       alpha: transparent,
       premultipliedAlpha: false,
+      // Cap to 1x pixel ratio — 2x doubles fragment shader invocations for no visible gain
+      dpr: Math.min(window.devicePixelRatio, 1),
     });
     const gl = renderer.gl;
 
@@ -250,24 +301,11 @@ export default function Galaxy({
       gl.clearColor(0, 0, 0, 1);
     }
 
-    let program: Program;
-
-    function resize() {
-      const scale = 1;
-      renderer.setSize(ctn.offsetWidth * scale, ctn.offsetHeight * scale);
-      if (program) {
-        program.uniforms.uResolution.value = new Color(
-          gl.canvas.width,
-          gl.canvas.height,
-          gl.canvas.width / gl.canvas.height,
-        );
-      }
-    }
-    window.addEventListener("resize", resize, false);
-    resize();
+    const focalArr = new Float32Array(focal);
+    const rotArr = new Float32Array(rotation);
 
     const geometry = new Triangle(gl);
-    program = new Program(gl, {
+    const program = new Program(gl, {
       vertex: vertexShader,
       fragment: fragmentShader,
       uniforms: {
@@ -279,18 +317,13 @@ export default function Galaxy({
             gl.canvas.width / gl.canvas.height,
           ),
         },
-        uFocal: { value: new Float32Array(focal) },
-        uRotation: { value: new Float32Array(rotation) },
+        uFocal: { value: focalArr },
+        uRotation: { value: rotArr },
         uStarSpeed: { value: starSpeed },
         uDensity: { value: density },
         uHueShift: { value: hueShift },
         uSpeed: { value: speed },
-        uMouse: {
-          value: new Float32Array([
-            smoothMousePos.current.x,
-            smoothMousePos.current.y,
-          ]),
-        },
+        uMouse: { value: MOUSE_BUF },
         uGlowIntensity: { value: glowIntensity },
         uSaturation: { value: saturation },
         uMouseRepulsion: { value: mouseRepulsion },
@@ -304,79 +337,106 @@ export default function Galaxy({
     });
 
     const mesh = new Mesh(gl, { geometry, program });
-    let animateId: number;
+    ctn.appendChild(gl.canvas);
+    gl.canvas.style.cssText =
+      "position:absolute;inset:0;width:100%;height:100%;";
+
+    // Throttle resize with ResizeObserver (fires less than window resize)
+    let resizeRaf = 0;
+    const ro = new ResizeObserver(() => {
+      cancelAnimationFrame(resizeRaf);
+      resizeRaf = requestAnimationFrame(() => {
+        renderer.setSize(ctn.offsetWidth, ctn.offsetHeight);
+        program.uniforms.uResolution.value = new Color(
+          gl.canvas.width,
+          gl.canvas.height,
+          gl.canvas.width / gl.canvas.height,
+        );
+      });
+    });
+    ro.observe(ctn);
+
+    // Visibility API — pause rAF when tab is hidden
+    let animId = 0;
+    let running = true;
+
+    const LERP = 0.05;
 
     function update(t: number) {
-      animateId = requestAnimationFrame(update);
-      if (!disableAnimation) {
+      if (!running) return;
+      animId = requestAnimationFrame(update);
+
+      const p = propsRef.current;
+
+      if (!p.disableAnimation) {
         program.uniforms.uTime.value = t * 0.001;
-        program.uniforms.uStarSpeed.value = (t * 0.001 * starSpeed) / 10.0;
+        program.uniforms.uStarSpeed.value = (t * 0.001 * p.starSpeed) / 10.0;
       }
 
-      const lerpFactor = 0.05;
-      smoothMousePos.current.x +=
-        (targetMousePos.current.x - smoothMousePos.current.x) * lerpFactor;
-      smoothMousePos.current.y +=
-        (targetMousePos.current.y - smoothMousePos.current.y) * lerpFactor;
+      // Lerp mouse in rAF — no GSAP, no extra allocations
+      smoothMouse.current.x +=
+        (targetMouse.current.x - smoothMouse.current.x) * LERP;
+      smoothMouse.current.y +=
+        (targetMouse.current.y - smoothMouse.current.y) * LERP;
+      smoothActive.current +=
+        (targetActive.current - smoothActive.current) * LERP;
 
-      smoothMouseActive.current +=
-        (targetMouseActive.current - smoothMouseActive.current) * lerpFactor;
-
-      program.uniforms.uMouse.value[0] = smoothMousePos.current.x;
-      program.uniforms.uMouse.value[1] = smoothMousePos.current.y;
-      program.uniforms.uMouseActiveFactor.value = smoothMouseActive.current;
+      // Mutate the shared buffer in-place — zero GC pressure
+      MOUSE_BUF[0] = smoothMouse.current.x;
+      MOUSE_BUF[1] = smoothMouse.current.y;
+      program.uniforms.uMouseActiveFactor.value = smoothActive.current;
 
       renderer.render({ scene: mesh });
     }
-    animateId = requestAnimationFrame(update);
-    ctn.appendChild(gl.canvas);
+    animId = requestAnimationFrame(update);
 
-    function handleMouseMove(e: MouseEvent) {
+    const onVisibilityChange = () => {
+      if (document.hidden) {
+        running = false;
+        cancelAnimationFrame(animId);
+      } else {
+        running = true;
+        animId = requestAnimationFrame(update);
+      }
+    };
+    document.addEventListener("visibilitychange", onVisibilityChange);
+
+    // Mouse — passive listener, only updates refs (zero work in handler)
+    const onMouseMove = (e: MouseEvent) => {
       const rect = ctn.getBoundingClientRect();
-      const x = (e.clientX - rect.left) / rect.width;
-      const y = 1.0 - (e.clientY - rect.top) / rect.height;
-      targetMousePos.current = { x, y };
-      targetMouseActive.current = 1.0;
-    }
-
-    function handleMouseLeave() {
-      targetMouseActive.current = 0.0;
-    }
+      targetMouse.current.x = (e.clientX - rect.left) / rect.width;
+      targetMouse.current.y = 1.0 - (e.clientY - rect.top) / rect.height;
+      targetActive.current = 1.0;
+    };
+    const onMouseLeave = () => {
+      targetActive.current = 0.0;
+    };
 
     if (mouseInteraction) {
-      ctn.addEventListener("mousemove", handleMouseMove);
-      ctn.addEventListener("mouseleave", handleMouseLeave);
+      ctn.addEventListener("mousemove", onMouseMove, { passive: true });
+      ctn.addEventListener("mouseleave", onMouseLeave);
     }
 
     return () => {
-      cancelAnimationFrame(animateId);
-      window.removeEventListener("resize", resize);
+      running = false;
+      cancelAnimationFrame(animId);
+      cancelAnimationFrame(resizeRaf);
+      ro.disconnect();
+      document.removeEventListener("visibilitychange", onVisibilityChange);
       if (mouseInteraction) {
-        ctn.removeEventListener("mousemove", handleMouseMove);
-        ctn.removeEventListener("mouseleave", handleMouseLeave);
+        ctn.removeEventListener("mousemove", onMouseMove);
+        ctn.removeEventListener("mouseleave", onMouseLeave);
       }
-      ctn.removeChild(gl.canvas);
+      if (ctn.contains(gl.canvas)) ctn.removeChild(gl.canvas);
       gl.getExtension("WEBGL_lose_context")?.loseContext();
     };
-  }, [
-    isMobile,
-    focal,
-    rotation,
-    starSpeed,
-    density,
-    hueShift,
-    disableAnimation,
-    speed,
-    mouseInteraction,
-    glowIntensity,
-    saturation,
-    mouseRepulsion,
-    twinkleIntensity,
-    rotationSpeed,
-    repulsionStrength,
-    autoCenterRepulsion,
-    transparent,
-  ]);
+  }
 
-  return <div ref={ctnDom} className="absolute inset-0" />;
+  return (
+    <div
+      ref={ctnRef}
+      className={className ?? "absolute inset-0"}
+      aria-hidden="true"
+    />
+  );
 }

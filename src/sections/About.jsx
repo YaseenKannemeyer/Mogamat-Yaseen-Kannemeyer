@@ -18,9 +18,9 @@ const About = () => {
         onMouseLeave={() => setActive(false)}
       >
         <MagicBento
-          spotlightRadius={0.5}
-          enableTilt={false}
-          enableMagnetism={false}
+          spotlightRadius={300}
+          enableTilt={active}
+          enableMagnetism={active}
         />
       </div>
     </section>
