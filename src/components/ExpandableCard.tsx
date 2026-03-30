@@ -208,7 +208,7 @@ export function ExpandableCard({
                         href={active.ctaLink}
                         target="_blank"
                         rel="noreferrer"
-                        className="px-4 py-2 text-sm rounded-full font-bold bg-blue-500 text-white hover:bg-blue-600 transition-colors"
+                        className="px-4 py-2 text-sm rounded-full font-bold bg-blue-500 text-white hover:bg-blue-600 transition-colors flex items-center justify-center text-center"
                       >
                         {active.ctaText}
                       </a>
@@ -218,7 +218,7 @@ export function ExpandableCard({
                         href={active.githubLink}
                         target="_blank"
                         rel="noreferrer"
-                        className="px-4 py-2 text-sm rounded-full font-bold bg-neutral-800 border border-neutral-600 text-neutral-300 hover:border-neutral-400 hover:text-white transition-colors"
+                        className="px-4 py-2 text-sm rounded-full font-bold bg-neutral-800 border border-neutral-600 text-neutral-300 hover:border-neutral-400 hover:text-white transition-colors flex items-center justify-center text-center"
                       >
                         {active.githubText}
                       </a>
