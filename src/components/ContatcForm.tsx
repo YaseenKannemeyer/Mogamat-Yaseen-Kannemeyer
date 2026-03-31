@@ -6,6 +6,7 @@ import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
 import Link from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
+import emailjs from "@emailjs/browser";
 import { cn } from "../lib/utils";
 import {
   Bold,
@@ -26,7 +27,12 @@ import {
   Loader2,
 } from "lucide-react";
 
-// ── Social links — swap # for your real URLs ──────────────────────────────────
+// ── EmailJS config (reads from Vite env vars) ─────────────────────────────────
+const EJS_SERVICE = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+const EJS_TEMPLATE = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+const EJS_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+
+// ── Social links ──────────────────────────────────────────────────────────────
 const SOCIALS = [
   {
     label: "WhatsApp",
@@ -87,7 +93,6 @@ const SOCIALS = [
 ];
 
 // ── Toolbar Button ────────────────────────────────────────────────────────────
-
 const ToolbarButton = ({
   onClick,
   active,
@@ -117,7 +122,6 @@ const ToolbarButton = ({
 const ToolbarDivider = () => <div className="mx-0.5 h-4 w-px bg-white/10" />;
 
 // ── Editor Toolbar ────────────────────────────────────────────────────────────
-
 const EditorToolbar = ({ editor }: { editor: Editor | null }) => {
   const setLink = useCallback(() => {
     if (!editor) return;
@@ -226,7 +230,6 @@ const EditorToolbar = ({ editor }: { editor: Editor | null }) => {
 };
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
-
 const htmlToPlainText = (html: string) => {
   const tmp = document.createElement("div");
   tmp.innerHTML = html;
@@ -254,7 +257,6 @@ const Field = ({
 );
 
 // ── Main Component ────────────────────────────────────────────────────────────
-
 export function ContactForm() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -262,6 +264,7 @@ export function ContactForm() {
   const [sent, setSent] = useState<"idle" | "sending" | "error" | "done">(
     "idle",
   );
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const editor = useEditor({
     extensions: [
@@ -281,22 +284,27 @@ export function ContactForm() {
   const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!editor) return;
+
     const messageHtml = editor.getHTML();
     const messagePlain = htmlToPlainText(messageHtml);
+
     setSent("sending");
+    setErrorMsg(null);
+
     try {
-      const res = await fetch("/api/send-message", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name,
-          email,
+      await emailjs.send(
+        EJS_SERVICE,
+        EJS_TEMPLATE,
+        {
+          from_name: name,
+          from_email: email,
           subject,
-          messageHtml,
-          messagePlain,
-        }),
-      });
-      if (!res.ok) throw new Error("Send failed");
+          message: messagePlain,
+          message_html: messageHtml,
+        },
+        EJS_KEY,
+      );
+
       setSent("done");
       setTimeout(() => {
         setSent("idle");
@@ -305,15 +313,24 @@ export function ContactForm() {
         setSubject("");
         editor.commands.clearContent();
       }, 3000);
-    } catch {
+    } catch (err: unknown) {
+      const msg =
+        err instanceof Error
+          ? err.message
+          : typeof err === "object" && err !== null && "text" in err
+            ? String((err as { text: unknown }).text)
+            : "Something went wrong";
+      setErrorMsg(msg);
       setSent("error");
-      setTimeout(() => setSent("idle"), 3000);
+      setTimeout(() => {
+        setSent("idle");
+        setErrorMsg(null);
+      }, 5000);
     }
   };
 
   return (
     <div className="relative mx-auto w-full max-w-xl overflow-hidden rounded-2xl border border-white/8 bg-[#0d0d0d] shadow-2xl shadow-black/70">
-      {/* Ambient top glow */}
       <div className="pointer-events-none absolute -top-24 left-1/2 h-48 w-72 -translate-x-1/2 rounded-full bg-blue-500/8 blur-3xl" />
 
       {/* Header */}
@@ -329,8 +346,6 @@ export function ContactForm() {
             Send me a message — I'll reply promptly.
           </p>
         </div>
-
-        {/* Social icons */}
         <div className="flex items-center gap-3.5 pt-0.5">
           {SOCIALS.map((s) => (
             <a
@@ -350,9 +365,8 @@ export function ContactForm() {
         </div>
       </div>
 
-      {/* Form body */}
+      {/* Form */}
       <form onSubmit={handleSend} className="relative space-y-4 px-7 py-6">
-        {/* Name + Email */}
         <div className="grid grid-cols-2 gap-3.5">
           <Field label="Name">
             <input
@@ -376,7 +390,6 @@ export function ContactForm() {
           </Field>
         </div>
 
-        {/* Subject */}
         <Field label="Subject">
           <input
             className={inputCls}
@@ -388,7 +401,6 @@ export function ContactForm() {
           />
         </Field>
 
-        {/* Rich-text editor */}
         <Field label="Message">
           <div className="overflow-hidden rounded-lg border border-white/10 bg-white/5 transition-all duration-200 focus-within:border-blue-500/40 focus-within:ring-2 focus-within:ring-blue-500/10">
             <EditorToolbar editor={editor} />
@@ -396,7 +408,12 @@ export function ContactForm() {
           </div>
         </Field>
 
-        {/* Submit */}
+        {sent === "error" && errorMsg && (
+          <p className="rounded-lg border border-red-500/20 bg-red-500/10 px-3.5 py-2 text-[12px] text-red-400">
+            {errorMsg}
+          </p>
+        )}
+
         <button
           type="submit"
           disabled={sent === "sending" || sent === "done"}
@@ -426,15 +443,14 @@ export function ContactForm() {
           )}
           {sent === "error" && (
             <>
-              <XCircle size={13} /> Something went wrong
+              <XCircle size={13} /> Failed — try again
             </>
           )}
         </button>
 
-        {/* Footer */}
         <div className="flex items-center justify-between pt-0.5">
           <p className="text-[11px] text-neutral-700">
-            Delivered via <span className="text-neutral-600">Resend</span>
+            Delivered via <span className="text-neutral-600">EmailJS</span>
           </p>
           <div className="flex items-center gap-3">
             {SOCIALS.map((s) => (
