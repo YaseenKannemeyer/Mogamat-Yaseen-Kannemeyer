@@ -1,26 +1,59 @@
 import { useState, useEffect, useRef } from "react";
 import { motion } from "motion/react";
 
+const handleScroll = (e, targetId) => {
+  e.preventDefault();
+  const target = document.querySelector(targetId);
+  if (!target) return;
+
+  const navbar = document.querySelector(".mobile-glow-bar");
+
+  // Always use the height of the "top bar" only, not the expanded mobile menu
+  const topBarHeight = navbar
+    ? navbar.querySelector("div.flex")?.offsetHeight
+    : 0;
+
+  const y = target.getBoundingClientRect().top + window.scrollY - topBarHeight;
+
+  window.scrollTo({ top: y, behavior: "smooth" });
+};
+
 function Navigation() {
   return (
     <ul className="nav-ul">
       <li className="nav-li">
-        <a className="nav-link mobile-glow-link" href="#home">
+        <a
+          className="nav-link mobile-glow-link"
+          href="#home"
+          onClick={(e) => handleScroll(e, "#home")}
+        >
           Home
         </a>
       </li>
       <li className="nav-li">
-        <a className="nav-link mobile-glow-link" href="#projects">
+        <a
+          className="nav-link mobile-glow-link"
+          href="#projects"
+          onClick={(e) => handleScroll(e, "#projects")}
+        >
           Projects
         </a>
       </li>
       <li className="nav-li">
-        <a className="nav-link mobile-glow-link" href="#about">
+        <a
+          className="nav-link mobile-glow-link"
+          href="#about"
+          onClick={(e) => handleScroll(e, "#about")}
+        >
           About
         </a>
       </li>
       <li className="nav-li">
-        <a className="nav-link mobile-glow-link" href="#contact">
+        <a
+          className="nav-link mobile-glow-link"
+          href="#contact"
+          onClick={(e) => handleScroll(e, "#contact")}
+        >
           Contact
         </a>
       </li>
