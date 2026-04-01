@@ -90,7 +90,7 @@ export const Hero = () => {
         <ParallaxBackground />
       </div>
 
-      <div className="z-10 flex flex-col items-center text-center gap-0 space-y-0 p-0 m-0">
+      <div className="z-10 flex flex-col items-center text-center gap-0 space-y-0 p-0 mt-15">
         {/* Profile image + socials — always side by side on all screen sizes */}
         <div className="flex items-center justify-center gap-4 m-0 p-0 leading-none">
           <div className="m-0 p-0 leading-none">
@@ -99,11 +99,11 @@ export const Hero = () => {
           <SocialsColumn />
         </div>
 
-        <div className="mt-10 p-0 leading-none">
+        <div className="mt-5 p-0 leading-none">
           <HoverHeroText className="m-0 p-0" />
         </div>
 
-        <div className="mt-10 p-0 leading-none">
+        <div className="mt-5 p-0 leading-none">
           <TechStack />
         </div>
       </div>
