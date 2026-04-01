@@ -3,7 +3,6 @@
 
 import { cn } from "../lib/utils";
 import { useState } from "react";
-import { Za } from "react-flags-select";
 
 interface Avatar {
   imageUrl: string;
@@ -28,14 +27,17 @@ export const AvatarCircles = ({
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   return (
-    <div className={cn("z-10 flex -space-x-4 rtl:space-x-reverse", className)}>
+    <div
+      className={cn("z-10 flex -space-x-4 rtl:space-x-reverse", className)}
+      style={{ paddingBottom: "6px", paddingRight: "6px" }}
+    >
       {avatarUrls.map((url, index) => (
         <a
           key={index}
           href={url.profileUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="relative inline-block"
+          className="relative inline-block flex-shrink-0"
           style={{ perspective: "600px" }}
           onMouseEnter={() => setHoveredIndex(index)}
           onMouseLeave={() => setHoveredIndex(null)}
@@ -45,13 +47,9 @@ export const AvatarCircles = ({
             className={cn(sizeClass)}
             style={{
               position: "relative",
+              flexShrink: 0,
               transformStyle: "preserve-3d",
-              // 3 full spins (1080°) + land on back face (180°) = 1260°
-              // On mouse leave: reverse back — 3 full spins landing on front (0°)
-              transition:
-                hoveredIndex === index && url.hoverUrl
-                  ? "transform 1.2s cubic-bezier(0.33, 0, 0.2, 1)"
-                  : "transform 1.2s cubic-bezier(0.33, 0, 0.2, 1)",
+              transition: "transform 1.2s cubic-bezier(0.33, 0, 0.2, 1)",
               transform:
                 hoveredIndex === index && url.hoverUrl
                   ? "rotateY(1260deg)"
@@ -72,6 +70,11 @@ export const AvatarCircles = ({
                 position: "absolute",
                 top: 0,
                 left: 0,
+                width: "100%",
+                height: "100%",
+                minWidth: 0,
+                minHeight: 0,
+                flexShrink: 0,
               }}
             />
 
@@ -91,6 +94,11 @@ export const AvatarCircles = ({
                   position: "absolute",
                   top: 0,
                   left: 0,
+                  width: "100%",
+                  height: "100%",
+                  minWidth: 0,
+                  minHeight: 0,
+                  flexShrink: 0,
                 }}
               />
             )}
@@ -98,24 +106,43 @@ export const AvatarCircles = ({
 
           {/* Flag Badge */}
           {url.showFlag && (
-            <div className="absolute bottom-0 right-0 overflow-hidden h-7 w-7 z-10">
-              <Za className="w-full h-full" />
+            <div
+              className="absolute z-10"
+              style={{
+                bottom: "0px",
+                right: "0px",
+                borderRadius: "2px",
+                overflow: "hidden",
+                boxShadow: "0 1px 3px rgba(0,0,0,0.4)",
+                lineHeight: 0,
+                touchAction: "none",
+                pointerEvents: "none",
+              }}
+            >
+              <img
+                src="https://flagcdn.com/32x24/za.png"
+                srcSet="https://flagcdn.com/32x24/za.png 1x, https://flagcdn.com/48x36/za.png 1.5x"
+                width="28"
+                height="21"
+                alt="South Africa"
+                style={{ display: "block", flexShrink: 0 }}
+              />
             </div>
           )}
         </a>
       ))}
 
       {(numPeople ?? 0) > 0 && (
-        <a
+        <div
           className={cn(
-            "flex items-center justify-center rounded-full border-2 font-medium",
+            "shrink-0 flex items-center justify-center rounded-full border-2 font-medium",
             "border-white bg-black text-white dark:border-gray-800 dark:bg-white dark:text-black",
             sizeClass,
             "text-xs",
           )}
         >
           +{numPeople}
-        </a>
+        </div>
       )}
     </div>
   );
