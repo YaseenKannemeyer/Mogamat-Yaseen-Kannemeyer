@@ -103,7 +103,7 @@ export const Hero = () => {
           <HoverHeroText className="m-0 p-0" />
         </div>
 
-        <div className="mt-20 p-0 leading-none">
+        <div className="mt-10 p-0 leading-none">
           <TechStack />
         </div>
       </div>
