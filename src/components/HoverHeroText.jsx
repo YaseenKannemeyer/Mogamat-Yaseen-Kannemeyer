@@ -1,5 +1,4 @@
 import { useRef } from "react";
-import VariableProximity from "./ui/VariableProximity";
 
 const HoverHeroText = () => {
   const containerRef = useRef(null);
@@ -8,16 +7,6 @@ const HoverHeroText = () => {
     "Hi, I'm Yaseen Kannemeyer.",
     "A software developer from South Africa.",
     "I'm a frontend developer working with React and Tailwind CSS, using modern UI libraries like shadcn/ui. I'm currently in my final year of an Applications Development diploma, where I study Java, and I'm focused on improving my web development skills.",
-  ];
-
-  const sentenceSettings = [
-    {
-      radius: 250,
-      from: "'wght' 400, 'opsz' 12",
-      to: "'wght' 1000, 'opsz' 50",
-    },
-    { radius: 200, from: "'wght' 400, 'opsz' 12", to: "'wght' 900, 'opsz' 45" },
-    { radius: 200, from: "'wght' 400, 'opsz' 12", to: "'wght' 900, 'opsz' 45" },
   ];
 
   const sentenceClasses = [
@@ -40,22 +29,18 @@ const HoverHeroText = () => {
         items-center
         justify-center
         overflow-visible
-        gap-4
+        gap-6
         px-4
         pt-4
       "
     >
       {sentences.map((sentence, index) => (
-        <VariableProximity
+        <p
           key={index}
-          label={sentence}
-          className={`variable-proximity-demo text-center font-semibold leading-snug max-w-4xl p-0 ${sentenceClasses[index]}`}
-          fromFontVariationSettings={sentenceSettings[index].from}
-          toFontVariationSettings={sentenceSettings[index].to}
-          containerRef={containerRef}
-          radius={sentenceSettings[index].radius}
-          falloff="linear"
-        />
+          className={`text-center max-w-4xl ${sentenceClasses[index]}`}
+        >
+          {sentence}
+        </p>
       ))}
     </div>
   );
