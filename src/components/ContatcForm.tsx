@@ -1,3 +1,4 @@
+/// <reference types="vite/client" />
 "use client";
 
 import React, { useState, useCallback } from "react";
@@ -8,6 +9,8 @@ import Link from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
 import emailjs from "@emailjs/browser";
 import { cn } from "../lib/utils";
+import { motion } from "motion/react";
+
 import {
   Bold,
   Italic,
@@ -123,6 +126,22 @@ const ToolbarDivider = () => <div className="mx-0.5 h-4 w-px bg-white/10" />;
 
 // ── Editor Toolbar ────────────────────────────────────────────────────────────
 const EditorToolbar = ({ editor }: { editor: Editor | null }) => {
+  const [, forceUpdate] = useState({});
+
+  React.useEffect(() => {
+    if (!editor) return;
+
+    const update = () => forceUpdate({});
+
+    editor.on("selectionUpdate", update);
+    editor.on("transaction", update);
+
+    return () => {
+      editor.off("selectionUpdate", update);
+      editor.off("transaction", update);
+    };
+  }, [editor]);
+
   const setLink = useCallback(() => {
     if (!editor) return;
     const prev = editor.getAttributes("link").href;
@@ -182,6 +201,7 @@ const EditorToolbar = ({ editor }: { editor: Editor | null }) => {
       >
         <List size={13} />
       </ToolbarButton>
+
       <ToolbarButton
         onClick={() => editor.chain().focus().toggleOrderedList().run()}
         active={editor.isActive("orderedList")}
@@ -268,7 +288,18 @@ export function ContactForm() {
 
   const editor = useEditor({
     extensions: [
-      StarterKit,
+      StarterKit.configure({
+        link: false,
+        underline: false,
+        bulletList: {
+          keepMarks: true,
+          keepAttributes: false,
+        },
+        orderedList: {
+          keepMarks: true,
+          keepAttributes: false,
+        },
+      }),
       Underline,
       Link.configure({ openOnClick: false }),
       Placeholder.configure({ placeholder: "Write your message…" }),
@@ -414,7 +445,10 @@ export function ContactForm() {
           </p>
         )}
 
-        <button
+        <motion.button
+          whileHover={{ scale: 1.05, y: -2 }}
+          whileTap={{ scale: 0.9, y: 1 }}
+          transition={{ type: "spring", stiffness: 300, damping: 15 }}
           type="submit"
           disabled={sent === "sending" || sent === "done"}
           className={cn(
@@ -446,7 +480,7 @@ export function ContactForm() {
               <XCircle size={13} /> Failed — try again
             </>
           )}
-        </button>
+        </motion.button>
 
         <div className="flex items-center justify-between pt-0.5">
           <p className="text-[11px] text-neutral-700">

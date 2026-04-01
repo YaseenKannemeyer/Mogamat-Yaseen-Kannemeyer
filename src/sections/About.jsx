@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import MagicBento from "../components/MagicBento";
 
