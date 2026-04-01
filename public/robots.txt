@@ -1,0 +1,11 @@
+# robots.txt — Mogamat Yaseen Kannemeyer Portfolio
+# https://mogamat-yaseen-kannemeyer.vercel.app/
+User-agent: *
+Allow: /
+
+# Block any build artefacts that might accidentally be served
+Disallow: /src/
+Disallow: /.vite/
+
+# Sitemap location
+Sitemap: https://mogamat-yaseen-kannemeyer.vercel.app/sitemap.xml
