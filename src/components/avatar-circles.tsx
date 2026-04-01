@@ -1,22 +1,22 @@
 /* eslint-disable @next/next/no-img-element */
-"use client"
+"use client";
 
-import { cn } from "../lib/utils"
-import { useState } from "react"
-import { Za } from "react-flags-select" // import the flag component
+import { cn } from "../lib/utils";
+import { useState } from "react";
+import { Za } from "react-flags-select";
 
 interface Avatar {
-  imageUrl: string
-  profileUrl: string
-  hoverUrl?: string
-  showFlag?: boolean // <-- use this to display the ZA flag
+  imageUrl: string;
+  profileUrl: string;
+  hoverUrl?: string;
+  showFlag?: boolean;
 }
 
 interface AvatarCirclesProps {
-  className?: string
-  numPeople?: number
-  avatarUrls: Avatar[]
-  sizeClass?: string
+  className?: string;
+  numPeople?: number;
+  avatarUrls: Avatar[];
+  sizeClass?: string;
 }
 
 export const AvatarCircles = ({
@@ -25,7 +25,7 @@ export const AvatarCircles = ({
   avatarUrls,
   sizeClass = "h-10 w-10",
 }: AvatarCirclesProps) => {
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   return (
     <div className={cn("z-10 flex -space-x-4 rtl:space-x-reverse", className)}>
@@ -36,46 +36,70 @@ export const AvatarCircles = ({
           target="_blank"
           rel="noopener noreferrer"
           className="relative inline-block"
+          style={{ perspective: "600px" }}
           onMouseEnter={() => setHoveredIndex(index)}
           onMouseLeave={() => setHoveredIndex(null)}
         >
-          {/* Default Image */}
-          <img
-            src={url.imageUrl}
-            alt={`Avatar ${index + 1}`}
-            className={cn(
-              "rounded-full border-2 border-white dark:border-gray-800 object-cover",
-              sizeClass,
-              "transition-opacity duration-800 ease-in-out"
-            )}
+          {/* Flip container */}
+          <div
+            className={cn(sizeClass)}
             style={{
-              opacity: hoveredIndex === index && url.hoverUrl ? 0 : 1,
-              position: "absolute",
-              top: 0,
-              left: 0,
+              position: "relative",
+              transformStyle: "preserve-3d",
+              // 3 full spins (1080°) + land on back face (180°) = 1260°
+              // On mouse leave: reverse back — 3 full spins landing on front (0°)
+              transition:
+                hoveredIndex === index && url.hoverUrl
+                  ? "transform 1.2s cubic-bezier(0.33, 0, 0.2, 1)"
+                  : "transform 1.2s cubic-bezier(0.33, 0, 0.2, 1)",
+              transform:
+                hoveredIndex === index && url.hoverUrl
+                  ? "rotateY(1260deg)"
+                  : "rotateY(0deg)",
             }}
-          />
-
-          {/* Hover Image */}
-          {url.hoverUrl && (
+          >
+            {/* Front face — default image */}
             <img
-              src={url.hoverUrl}
-              alt={`Avatar Hover ${index + 1}`}
+              src={url.imageUrl}
+              alt={`Avatar ${index + 1}`}
               className={cn(
                 "rounded-full border-2 border-white dark:border-gray-800 object-cover",
                 sizeClass,
-                "transition-opacity duration-800 ease-in-out"
               )}
               style={{
-                opacity: hoveredIndex === index ? 1 : 0,
+                backfaceVisibility: "hidden",
+                WebkitBackfaceVisibility: "hidden",
+                position: "absolute",
+                top: 0,
+                left: 0,
               }}
             />
-          )}
+
+            {/* Back face — hover image */}
+            {url.hoverUrl && (
+              <img
+                src={url.hoverUrl}
+                alt={`Avatar Back ${index + 1}`}
+                className={cn(
+                  "rounded-full border-2 border-white dark:border-gray-800 object-cover",
+                  sizeClass,
+                )}
+                style={{
+                  backfaceVisibility: "hidden",
+                  WebkitBackfaceVisibility: "hidden",
+                  transform: "rotateY(180deg)",
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                }}
+              />
+            )}
+          </div>
 
           {/* Flag Badge */}
           {url.showFlag && (
-            <div className="absolute bottom-0 right-0 overflow-hidden h-7 w-7">
-              <Za className="w-full h-full" /> {/* full size of the badge */}
+            <div className="absolute bottom-0 right-0 overflow-hidden h-7 w-7 z-10">
+              <Za className="w-full h-full" />
             </div>
           )}
         </a>
@@ -87,13 +111,12 @@ export const AvatarCircles = ({
             "flex items-center justify-center rounded-full border-2 font-medium",
             "border-white bg-black text-white dark:border-gray-800 dark:bg-white dark:text-black",
             sizeClass,
-            "text-xs"
+            "text-xs",
           )}
-          href=""
         >
           +{numPeople}
         </a>
       )}
     </div>
-  )
-}
+  );
+};

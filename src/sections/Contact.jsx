@@ -3,7 +3,10 @@ import Galaxy from "../components/GalaxyBackground";
 
 const Contact = () => {
   return (
-    <section className="relative h-screen flex justify-center items-center">
+    <section
+      id="contact"
+      className="relative h-screen flex justify-center items-center"
+    >
       <Galaxy
         className="absolute inset-0 z-0 h-screen"
         starSpeed={0.2}

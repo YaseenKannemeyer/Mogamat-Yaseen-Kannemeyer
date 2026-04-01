@@ -21,7 +21,10 @@ const Projects = () => {
 
   return (
     <BackgroundWrapper>
-      <div className="container mx-auto max-w-4xl px-4 py-16 flex flex-col gap-10 self-start w-full">
+      <div
+        id="projects"
+        className="container mx-auto max-w-4xl px-4 py-16 flex flex-col gap-10 self-start w-full"
+      >
         {/* Header Row */}
         <div className="flex items-end justify-between gap-4">
           {/* Left: Heading */}

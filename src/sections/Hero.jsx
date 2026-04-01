@@ -5,7 +5,10 @@ import TechStack from "../components/TechStack";
 
 export const Hero = () => {
   return (
-    <section className="flex min-h-screen flex-col items-center justify-center overflow-hidden c-space">
+    <section
+      id="home"
+      className="flex min-h-screen flex-col items-center justify-center overflow-hidden c-space"
+    >
       <div className="absolute inset-0 -z-10">
         <ParallaxBackground />
       </div>
@@ -26,6 +29,5 @@ export const Hero = () => {
     </section>
   );
 };
-
 
 export default Hero;
