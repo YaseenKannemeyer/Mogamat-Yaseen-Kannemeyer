@@ -106,7 +106,7 @@ const Projects = () => {
         </div>
 
         {/* Filter Tags */}
-        <div className="flex flex-wrap gap-2">
+        <div className="flex items-center justify-center flex-wrap gap-2">
           {allTags.map((tag) => (
             <button
               key={tag}
