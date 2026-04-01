@@ -489,9 +489,9 @@ const CONFIG = {
   github: "https://github.com/YaseenKannemeyer",
   linkedin: "https://www.linkedin.com/in/yaseen-kannemeyer",
   navLinks: [
-    { label: "Work", href: "#work" },
+    { label: "Home", href: "#home" },
+    { label: "Projects", href: "#projects" },
     { label: "About", href: "#about" },
-    { label: "Process", href: "#process" },
     { label: "Contact", href: "#contact" },
   ],
   copyrightYear: new Date().getFullYear(),
