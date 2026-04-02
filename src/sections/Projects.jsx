@@ -12,6 +12,7 @@ const allTags = [
   "Java",
   "Java Swing",
   "Apache Derby",
+  "Figma",
 ];
 
 const Projects = () => {

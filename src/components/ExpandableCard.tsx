@@ -102,6 +102,56 @@ const cards = [
       </p>
     ),
   },
+  {
+    description: "UI/UX Design • Figma • Mobile App Redesign",
+    title: "MyCiTi Bus App — UX Redesign Case Study",
+    tags: ["Figma", "UI/UX", "Mobile Design", "User Research"],
+    src: "/assets/projectimages/myciti-redesign.png",
+
+    ctaText: "Prototype",
+    ctaLink:
+      "https://www.figma.com/proto/YYuOtxbjpZf5YxaIg5Gdql/MAF?node-id=0-1&t=jVuFhMHgyd9kqhmI-1",
+
+    githubText: "Design File",
+    githubLink:
+      "https://www.figma.com/design/YYuOtxbjpZf5YxaIg5Gdql/MAF?node-id=375-2133&t=X9LMQMifEB9c97zZ-1",
+
+    content: () => (
+      <p>
+        This project is a UX/UI redesign of the MyCiTi bus app, inspired by
+        negative user feedback on the Google Play Store. Many users reported
+        that the existing interface feels outdated, difficult to navigate, and
+        unreliable — especially for daily commuters who depend on the app.{" "}
+        <br />
+        <br />
+        The redesign focuses on improving usability, clarity, and overall user
+        experience by introducing a modern, intuitive interface. Two key areas
+        were prioritised: the dashboard and the About Us page. <br />
+        <br />
+        The dashboard was redesigned as the central hub of the app, giving users
+        quick access to essential features such as live bus tracking, saved card
+        details, and timetables. A major usability issue identified was the
+        difficulty in saving and accessing MyCiTi cards. The current system
+        requires repeated scanning, which is slow and often unreliable. This
+        redesign introduces a secure method for saving or manually entering card
+        details, making the process faster and more efficient. <br />
+        <br />
+        Another major improvement is live tracking. Due to frequent delays and
+        breakdowns, commuters need accurate real-time updates. The redesigned
+        dashboard places live tracking at the forefront, ensuring users always
+        know where their bus is and when it will arrive. <br />
+        <br />
+        The About Us page, while a smaller feature, was also refined to improve
+        transparency and trust. It provides clear information about services,
+        company values, and support channels, helping users feel more confident
+        in the system. <br />
+        <br />
+        Overall, this redesign aims to create a smoother, more reliable, and
+        user-friendly experience tailored to the real needs of everyday
+        commuters.
+      </p>
+    ),
+  },
 ];
 
 type Card = (typeof cards)[number];
