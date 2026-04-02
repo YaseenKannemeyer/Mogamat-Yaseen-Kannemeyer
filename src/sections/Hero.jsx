@@ -7,6 +7,7 @@ import { cn } from "../lib/utils";
 const SOCIALS = [
   {
     label: "WhatsApp",
+    display: "+27 83 925 3595",
     href: "https://wa.link/ekk8rw",
     color: "hover:text-green-400",
     icon: (
@@ -21,6 +22,7 @@ const SOCIALS = [
   },
   {
     label: "GitHub",
+    display: "YaseenKannemeyer",
     href: "https://github.com/YaseenKannemeyer",
     color: "hover:text-white",
     icon: (
@@ -35,6 +37,7 @@ const SOCIALS = [
   },
   {
     label: "LinkedIn",
+    display: "in/yaseen-kannemeyer",
     href: "https://www.linkedin.com/in/yaseen-kannemeyer",
     color: "hover:text-blue-400",
     icon: (
@@ -49,6 +52,7 @@ const SOCIALS = [
   },
   {
     label: "Instagram",
+    display: "@yaseenkannemeyer",
     href: "https://www.instagram.com/yaseenkannemeyer",
     color: "hover:text-pink-400",
     icon: (
@@ -61,20 +65,39 @@ const SOCIALS = [
       </svg>
     ),
   },
+  {
+    label: "Email",
+    display: "yaseenkannemeyer@gmail.com",
+    href: "mailto:yaseenkannemeyer@gmail.com",
+    color: "hover:text-red-400",
+    icon: (
+      <svg
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        className="h-[15px] w-[15px]"
+      >
+        <path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z" />
+      </svg>
+    ),
+  },
 ];
 
 const SocialsColumn = () => (
-  <div className="flex flex-col gap-4 items-center justify-center">
-    {SOCIALS.map(({ label, href, color, icon }) => (
+  <div className="flex flex-col gap-3 items-start justify-center">
+    {SOCIALS.map(({ label, display, href, color, icon }) => (
       <a
         key={label}
         href={href}
-        target="_blank"
+        target={href.startsWith("mailto") ? "_self" : "_blank"}
         rel="noopener noreferrer"
         aria-label={label}
-        className={cn("text-gray-400 transition-colors duration-200", color)}
+        className={cn(
+          "flex items-center gap-2 text-gray-400 transition-colors duration-200",
+          color,
+        )}
       >
-        {icon}
+        <span className="flex-shrink-0">{icon}</span>
+        <span className="text-xs font-mono tracking-wide">{display}</span>
       </a>
     ))}
   </div>
