@@ -23,6 +23,85 @@ const CloseIcon = () => (
 
 const cards = [
   {
+    description: "Three.js • Tween.js • 3D Interactive Gallery",
+    title: "3D Rotating Art Gallery",
+    tags: ["Three.js", "Tween.js", "3D", "WebGL", "JavaScript"],
+    src: "/assets/projectimages/3d-gallery-project.png",
+    ctaText: "View Live",
+    ctaLink: "https://artwork-gallary.vercel.app/",
+    githubText: "GitHub" as string | undefined,
+    githubLink: "https://github.com/YaseenKannemeyer/Artwork-Gallary" as
+      | string
+      | undefined,
+    content: () => (
+      <p>
+        A fully interactive 3D art gallery built with Three.js featuring six
+        artworks arranged in a 360° circular layout. Users can navigate between
+        artworks using raycast-enabled left/right arrows, while smooth tween.js
+        animations handle rotation with quadratic easing. <br />
+        <br />
+        Each artwork is encased in a realistic gold frame, constructed with
+        layered BoxGeometry and metallic MeshStandardMaterials to simulate true
+        gallery frames. Museum-style plaques dynamically display the artwork's
+        title, artist, year, and a short description, fading in and out as the
+        gallery rotates. <br />
+        <br />
+        The gallery includes a mirror floor using Reflector for a polished
+        aesthetic, dramatic overhead spotlighting for immersive lighting, and
+        ambient fill for balance. <br />
+        <br />
+        <strong>Key features:</strong>
+        <br />
+        • Circular rotating gallery with 6 artworks
+        <br />
+        • Smooth tween.js transitions with Quadratic.InOut easing
+        <br />
+        • Gold ornate frames with realistic sheen
+        <br />
+        • Museum-style plaques with fading UI content
+        <br />
+        • Mirror floor for reflection and depth
+        <br />
+        • Raycasting navigation via 3D arrow buttons
+        <br />
+        • Spotlight lighting with ambient fill
+        <br />
+        <br />
+        <strong>Original changes from tutorial:</strong>
+        <br />
+        • Redesigned frames with two-layer gold and inner bevel for depth
+        <br />
+        • Custom HTML plaques connected to 3D scene with opacity fade
+        transitions
+        <br />
+        <br />
+        <strong>Core concepts learned:</strong>
+        <br />
+        1. Three.js fundamentals: Scene, PerspectiveCamera, WebGLRenderer,
+        setAnimationLoop
+        <br />
+        2. 3D objects & geometry: BoxGeometry, CircleGeometry,
+        MeshStandardMaterial
+        <br />
+        3. Textures & image mapping: TextureLoader, sRGB color space
+        <br />
+        4. Scene graph & transformations: Object3D grouping, positioning,
+        rotation
+        <br />
+        5. Lighting & realism: AmbientLight, SpotLight, material response
+        <br />
+        6. Advanced visual effects: Reflector for reflective floor, immersive
+        depth
+        <br />
+        7. Interactivity: Raycaster for mouse click detection and navigation
+        <br />
+        8. Animations: tween.js for smooth gallery rotation with easing
+        <br />
+        9. UI + 3D integration: Dynamic plaques, opacity transitions
+      </p>
+    ),
+  },
+  {
     description: "Next.js • Framer Motion • TypeScript",
     title: "Framer Motion — React Animation Blog",
     tags: ["Next.js", "React", "TypeScript", "Tailwind CSS"],
