@@ -211,7 +211,7 @@ const MagicBento: React.FC<BentoProps> = ({
           </div>
         )}
         {index === 4 && (
-          <a href="mailto:hello@yaseen.dev" className="bc-cta">
+          <a href="#contact" className="bc-cta">
             Get in touch →
           </a>
         )}
