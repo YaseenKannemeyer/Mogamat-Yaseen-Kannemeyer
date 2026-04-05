@@ -290,7 +290,7 @@ export function ExpandableCard({
             <motion.div
               layoutId={`card-${active.title}-${id}`}
               ref={ref}
-              className="relative w-full max-w-[500px] h-full md:h-fit md:max-h-[90vh] flex flex-col bg-white dark:bg-neutral-900 sm:rounded-3xl overflow-y-auto"
+              className="relative w-full max-w-[500px] h-[100dvh] md:h-fit md:max-h-[90vh] flex flex-col bg-white dark:bg-neutral-900 sm:rounded-3xl overflow-y-auto"
             >
               <motion.button
                 key={`close-${active.title}-${id}`}
@@ -310,7 +310,7 @@ export function ExpandableCard({
                   height={200}
                   src={active.src}
                   alt={active.title}
-                  className="w-full h-80 sm:rounded-tr-lg sm:rounded-tl-lg object-cover object-top"
+                  className="w-full h-56 sm:h-80 sm:rounded-tr-lg sm:rounded-tl-lg object-contain bg-neutral-100 dark:bg-neutral-800"
                 />
               </motion.div>
 
