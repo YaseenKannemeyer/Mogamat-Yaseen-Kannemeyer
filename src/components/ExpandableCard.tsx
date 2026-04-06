@@ -23,6 +23,72 @@ const CloseIcon = () => (
 
 const cards = [
   {
+    description: "GSAP • React • Interactive Cocktail Experience",
+    title: "Awwwards-Style Cocktail Bar Website",
+    tags: ["GSAP", "ScrollTrigger", "React", "Tailwind", "Animations", "UI/UX"],
+    src: "/assets/projectimages/cocktail-bar-project.png",
+    ctaText: "View Live",
+    ctaLink: "https://gsap-cocktail-lab.vercel.app/",
+    githubText: "GitHub",
+    githubLink: "https://github.com/YaseenKannemeyer/gsap-cocktail-lab",
+    content: () => (
+      <p>
+        A modern, animation-driven cocktail bar website built with GSAP and
+        React, inspired by Awwwards-level design. This project focuses on
+        creating a highly immersive user experience using smooth transitions,
+        scroll-based storytelling, and dynamic UI interactions. <br />
+        <br />
+        The hero section features advanced text animations powered by SplitText,
+        where each character animates individually with staggered timing and
+        gradient styling. A scroll-controlled background video enhances the
+        experience by syncing playback with user scroll, creating a cinematic
+        effect. <br />
+        <br />
+        Throughout the site, parallax animations bring decorative elements like
+        leaves to life, moving in opposite directions to create depth and
+        motion. The cocktail menu is dynamically rendered and enhanced with
+        subtle scroll interactions for a polished, responsive feel. <br />
+        <br />
+        <strong>Key features:</strong>
+        <br />
+        • Character-level text animations using GSAP SplitText
+        <br />
+        • Scroll-synced video playback with pinning effect
+        <br />
+        • Parallax leaf animations using ScrollTrigger
+        <br />
+        • Smooth staggered entrance animations for content
+        <br />
+        • Responsive animation behavior based on screen size
+        <br />
+        • Dynamic cocktail & mocktail menu rendering
+        <br />
+        • Modern UI with Tailwind CSS styling
+        <br />
+        <br />
+        <strong>Core concepts learned:</strong>
+        <br />
+        1. GSAP fundamentals: gsap.to(), gsap.from(), gsap.timeline()
+        <br />
+        2. ScrollTrigger: pinning, scrubbing, and scroll-based animations
+        <br />
+        3. Text animation: SplitText for characters, words, and lines
+        <br />
+        4. Advanced timelines: sequencing and syncing animations
+        <br />
+        5. Video control: syncing playback with scroll position
+        <br />
+        6. Parallax effects: layered motion for depth
+        <br />
+        7. Responsive animation logic using media queries
+        <br />
+        8. React + GSAP integration with useGSAP and refs
+        <br />
+        9. Performance considerations for smooth animations
+      </p>
+    ),
+  },
+  {
     description: "Three.js • Tween.js • 3D Interactive Gallery",
     title: "3D Rotating Art Gallery",
     tags: ["Three.js", "Tween.js", "3D", "WebGL", "JavaScript"],
