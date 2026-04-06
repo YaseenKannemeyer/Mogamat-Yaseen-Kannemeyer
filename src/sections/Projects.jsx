@@ -7,6 +7,8 @@ const allTags = [
   "All",
   "TypeScript",
   "React",
+  "GSAP",
+  "Vite",
   "Next.js",
   "Tailwind CSS",
   "Java",
