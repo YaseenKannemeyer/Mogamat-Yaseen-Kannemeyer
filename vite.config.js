@@ -4,7 +4,6 @@ import tailwindcss from "@tailwindcss/vite";
 import path from "path";
 import { visualizer } from "rollup-plugin-visualizer";
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss(), visualizer({ open: true })],
   resolve: {
@@ -15,9 +14,14 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        manualChunks: {
-          "framer-motion": ["framer-motion"],
-          gsap: ["gsap"],
+        manualChunks(id) {
+          if (id.includes("framer-motion")) {
+            return "framer-motion";
+          }
+
+          if (id.includes("gsap")) {
+            return "gsap";
+          }
         },
       },
     },
