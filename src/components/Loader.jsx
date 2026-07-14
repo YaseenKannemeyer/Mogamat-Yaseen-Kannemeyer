@@ -132,12 +132,16 @@ const MissionPatch = () => (
   </svg>
 );
 
-export default function Loader() {
+export default function Loader({ fadeOut }) {
   return (
-    <div className="loader-screen relative overflow-hidden">
+    <div
+      className={`loader-screen fixed inset-0 z-50 overflow-hidden bg-black transition-opacity duration-500 ${
+        fadeOut ? "opacity-0 pointer-events-none" : "opacity-100"
+      }`}
+    >
       {/* Background */}
       <Galaxy
-        className="absolute inset-0 z-0 h-screen"
+        className="absolute inset-0 z-0 h-full w-full"
         starSpeed={0.2}
         density={0.3}
         hueShift={0}
@@ -152,11 +156,9 @@ export default function Loader() {
       />
 
       {/* Loader Content */}
-      <div className="relative z-10 flex flex-col items-center">
+      <div className="relative z-10 flex h-full flex-col items-center justify-center">
         <MissionPatch />
-
         <h2 className="loader-title m-5">INITIALIZING</h2>
-
         <div className="loader-bar">
           <div className="loader-progress" />
         </div>
