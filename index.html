@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en-ZA">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -53,7 +53,7 @@
     <!-- Replace with the real path to your OG image (1200×630 px recommended) -->
     <meta
       property="og:image"
-      content="https://mogamat-yaseen-kannemeyer.vercel.app/assets/og-image.png"
+      content="https://mogamat-yaseen-kannemeyer.vercel.app/assets/og-image.jpg"
     />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
@@ -81,7 +81,7 @@
     />
     <meta
       name="twitter:image"
-      content="https://mogamat-yaseen-kannemeyer.vercel.app/assets/og-image.png"
+      content="https://mogamat-yaseen-kannemeyer.vercel.app/assets/og-image.jpg"
     />
     <!-- Add your Twitter handle if you have one -->
     <!-- <meta name="twitter:creator" content="@yourhandle" /> -->
@@ -99,13 +99,23 @@
             "name": "Mogamat Yaseen Kannemeyer",
             "alternateName": "Yaseen Kannemeyer",
             "url": "https://mogamat-yaseen-kannemeyer.vercel.app/",
-            "image": "https://mogamat-yaseen-kannemeyer.vercel.app/assets/og-image.png",
+            "image": "https://mogamat-yaseen-kannemeyer.vercel.app/assets/og-image.jpg",
             "jobTitle": "Front-end Developer",
             "address": {
               "@type": "PostalAddress",
               "addressLocality": "Cape Town",
               "addressCountry": "ZA"
             },
+            "knowsAbout": [
+              "React",
+              "Next.js",
+              "TypeScript",
+              "JavaScript",
+              "Tailwind CSS",
+              "Java",
+              "Front-end Development",
+              "UI/UX Design"
+            ],
             "sameAs": [
               "https://github.com/YaseenKannemeyer",
               "https://www.linkedin.com/in/yaseen-kannemeyer",
@@ -119,7 +129,115 @@
             "url": "https://mogamat-yaseen-kannemeyer.vercel.app/",
             "name": "Yaseen Kannemeyer Portfolio",
             "alternateName": "Yaseen Kannemeyer",
+            "inLanguage": "en-ZA",
+            "publisher": {
+              "@id": "https://mogamat-yaseen-kannemeyer.vercel.app/#person"
+            }
+          },
+          {
+            "@type": "ProfilePage",
+            "@id": "https://mogamat-yaseen-kannemeyer.vercel.app/#profilepage",
+            "url": "https://mogamat-yaseen-kannemeyer.vercel.app/",
+            "name": "Mogamat Yaseen Kannemeyer | Front-end Developer",
+            "isPartOf": {
+              "@id": "https://mogamat-yaseen-kannemeyer.vercel.app/#website"
+            },
+            "mainEntity": {
+              "@id": "https://mogamat-yaseen-kannemeyer.vercel.app/#person"
+            },
             "inLanguage": "en-ZA"
+          },
+          {
+            "@type": "ItemList",
+            "@id": "https://mogamat-yaseen-kannemeyer.vercel.app/#projects",
+            "name": "Projects",
+            "itemListOrder": "https://schema.org/ItemListOrderDescending",
+            "numberOfItems": 6,
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "item": {
+                  "@type": "CreativeWork",
+                  "name": "Awwwards-Style Cocktail Bar Website",
+                  "description": "An animation-driven cocktail bar website built with GSAP and React, featuring scroll-synced video, SplitText character animation and parallax effects.",
+                  "url": "https://gsap-cocktail-lab.vercel.app/",
+                  "author": {
+                    "@id": "https://mogamat-yaseen-kannemeyer.vercel.app/#person"
+                  },
+                  "keywords": "GSAP, React, ScrollTrigger, Tailwind CSS"
+                }
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "item": {
+                  "@type": "CreativeWork",
+                  "name": "3D Rotating Art Gallery",
+                  "description": "An interactive 3D art gallery built with Three.js, featuring six artworks in a 360 degree layout with raycast navigation and a mirror floor.",
+                  "url": "https://artwork-gallary.vercel.app/",
+                  "author": {
+                    "@id": "https://mogamat-yaseen-kannemeyer.vercel.app/#person"
+                  },
+                  "keywords": "Three.js, Tween.js, WebGL, JavaScript"
+                }
+              },
+              {
+                "@type": "ListItem",
+                "position": 3,
+                "item": {
+                  "@type": "CreativeWork",
+                  "name": "Framer Motion — React Animation Blog",
+                  "description": "An interactive animation blog built with Next.js teaching React animation with Framer Motion, pairing every concept with a live demo.",
+                  "url": "https://framer-motion-react-beta.vercel.app/",
+                  "author": {
+                    "@id": "https://mogamat-yaseen-kannemeyer.vercel.app/#person"
+                  },
+                  "keywords": "Next.js, React, TypeScript, Tailwind CSS"
+                }
+              },
+              {
+                "@type": "ListItem",
+                "position": 4,
+                "item": {
+                  "@type": "CreativeWork",
+                  "name": "How To React Hooks",
+                  "description": "A Next.js learning platform covering React Hooks with worked examples.",
+                  "url": "https://how-to-react-hooks.vercel.app/",
+                  "author": {
+                    "@id": "https://mogamat-yaseen-kannemeyer.vercel.app/#person"
+                  },
+                  "keywords": "Next.js, React, React Hooks"
+                }
+              },
+              {
+                "@type": "ListItem",
+                "position": 5,
+                "item": {
+                  "@type": "CreativeWork",
+                  "name": "CampusCompanion",
+                  "description": "A desktop student-management application built with Java Swing and Apache Derby.",
+                  "url": "https://github.com/YaseenKannemeyer/CampusCompanion",
+                  "author": {
+                    "@id": "https://mogamat-yaseen-kannemeyer.vercel.app/#person"
+                  },
+                  "keywords": "Java, Java Swing, Apache Derby, Desktop"
+                }
+              },
+              {
+                "@type": "ListItem",
+                "position": 6,
+                "item": {
+                  "@type": "CreativeWork",
+                  "name": "MyCiTi Bus App — UX Redesign Case Study",
+                  "description": "A UI/UX case study redesigning the MyCiTi bus mobile app in Figma.",
+                  "author": {
+                    "@id": "https://mogamat-yaseen-kannemeyer.vercel.app/#person"
+                  },
+                  "keywords": "UI/UX Design, Figma, Mobile App Design"
+                }
+              }
+            ]
           }
         ]
       }
@@ -136,7 +254,7 @@
       sizes="192x192"
       href="/assets/icon-192.png"
     />
-    <link rel="apple-touch-icon" href="/assets/icon-192.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
     <meta name="theme-color" content="#0a0a0a" />
 
@@ -145,13 +263,53 @@
     ═══════════════════════════════════════════════ -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Single non-blocking request for all three families. Previously this was
+         four separate round-trips, two of them render-blocking CSS @imports. -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&display=swap"
-      rel="stylesheet"
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&family=Orbitron:wght@400;500;600;700&family=Outfit:wght@300;400;500&display=swap"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&family=Orbitron:wght@400;500;600;700&family=Outfit:wght@300;400;500&display=swap"
+      />
+    </noscript>
+
+    <!-- LCP layer of the hero parallax -->
+    <link
+      rel="preload"
+      as="image"
+      type="image/avif"
+      href="/assets/parallax/sky.avif"
+      fetchpriority="high"
     />
   </head>
   <body>
     <div id="root"></div>
+    <noscript>
+      <div style="max-width: 42rem; margin: 0 auto; padding: 2rem; color: #fff">
+        <h1>Mogamat Yaseen Kannemeyer</h1>
+        <p>
+          Front-end developer based in Cape Town, South Africa, specialising in
+          React, Next.js, TypeScript and Java.
+        </p>
+        <ul>
+          <li>
+            <a href="https://github.com/YaseenKannemeyer">GitHub</a>
+          </li>
+          <li>
+            <a href="https://www.linkedin.com/in/yaseen-kannemeyer">LinkedIn</a>
+          </li>
+          <li>
+            <a href="/assets/Mogamat_Yaseen_Kannemeyer_CV.pdf">Curriculum vitae</a>
+          </li>
+        </ul>
+        <p>This portfolio requires JavaScript for its interactive content.</p>
+      </div>
+    </noscript>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

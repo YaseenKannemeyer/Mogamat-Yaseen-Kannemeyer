@@ -5,10 +5,10 @@ const Contact = () => {
   return (
     <section
       id="contact"
-      className="relative h-screen flex justify-center items-center"
+      className="relative min-h-screen flex justify-center items-center py-20"
     >
       <Galaxy
-        className="absolute inset-0 z-0 h-screen"
+        className="absolute inset-0 z-0 h-full"
         starSpeed={0.2}
         density={0.2}
         hueShift={0}

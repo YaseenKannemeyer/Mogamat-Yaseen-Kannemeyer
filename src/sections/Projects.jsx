@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ExpandableCard } from "../components/ExpandableCard";
 import { BackgroundWrapper } from "../components/ProjectBackground";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 
 const allTags = [
   "All",
@@ -25,15 +25,19 @@ const Projects = () => {
 
   return (
     <BackgroundWrapper>
-      <div
+      <section
         id="projects"
+        aria-labelledby="projects-heading"
         className="container mx-auto max-w-4xl px-4 py-16 flex flex-col gap-10 self-start w-full"
       >
         {/* Header Row */}
         <div className="flex items-end justify-between gap-4">
           {/* Left: Heading */}
           <div className="flex flex-col gap-1">
-            <h2 className="text-4xl md:text-5xl font-bold text-white leading-tight">
+            <h2
+              id="projects-heading"
+              className="text-4xl md:text-5xl font-bold text-white leading-tight"
+            >
               Projects
             </h2>
             <p className="text-neutral-500 text-sm max-w-xs mt-1 hidden md:block">
@@ -131,7 +135,7 @@ const Projects = () => {
 
         {/* Cards */}
         <ExpandableCard search={search} activeTag={activeTag} />
-      </div>
+      </section>
     </BackgroundWrapper>
   );
 };

@@ -96,74 +96,111 @@ const MagicBento: React.FC<BentoProps> = ({
   const mouseRef = useRef({ x: 0, y: 0 });
   const insideRef = useRef(false);
 
-  const tick = useCallback(() => {
+  useEffect(() => {
+    if (disableAnimations || !enableSpotlight) return;
     const grid = gridRef.current;
     if (!grid) return;
 
-    const { x: mx, y: my } = mouseRef.current;
-    const cards = grid.querySelectorAll<HTMLElement>(".card");
+    // Cached so the hot path never re-queries the DOM or reads layout. Both
+    // caches are invalidated on scroll/resize, the only things that move them.
+    let cards: HTMLElement[] = [];
+    let rects: DOMRect[] = [];
+    let sectionRect: DOMRect | null = null;
+    let measured = false;
+
+    const measure = () => {
+      cards = Array.from(grid.querySelectorAll<HTMLElement>(".card"));
+      rects = cards.map((card) => card.getBoundingClientRect());
+      sectionRect =
+        grid.closest(".bento-section")?.getBoundingClientRect() ?? null;
+      measured = true;
+    };
+
+    const invalidate = () => {
+      measured = false;
+    };
+
     const proximity = spotlightRadius * 0.5;
     const fadeDistance = spotlightRadius * 0.75;
 
-    cards.forEach((card) => {
-      const rect = card.getBoundingClientRect();
-      const cx = rect.left + rect.width / 2;
-      const cy = rect.top + rect.height / 2;
-      const dist = Math.max(
-        0,
-        Math.hypot(mx - cx, my - cy) - Math.max(rect.width, rect.height) / 2,
-      );
+    const update = () => {
+      rafRef.current = null;
+      if (!measured) measure();
 
-      const intensity = !insideRef.current
-        ? 0
-        : dist <= proximity
-          ? 1
-          : dist <= fadeDistance
-            ? (fadeDistance - dist) / (fadeDistance - proximity)
-            : 0;
+      const { x: mx, y: my } = mouseRef.current;
+      const inside = insideRef.current;
 
-      const lx = ((mx - rect.left) / rect.width) * 100;
-      const ly = ((my - rect.top) / rect.height) * 100;
+      for (let i = 0; i < cards.length; i++) {
+        const card = cards[i];
+        const rect = rects[i];
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height / 2;
+        const dist = Math.max(
+          0,
+          Math.hypot(mx - cx, my - cy) - Math.max(rect.width, rect.height) / 2,
+        );
 
-      card.style.setProperty("--glow-x", `${lx}%`);
-      card.style.setProperty("--glow-y", `${ly}%`);
-      card.style.setProperty("--glow-intensity", intensity.toFixed(3));
-      card.style.setProperty("--glow-radius", `${spotlightRadius}px`);
-    });
+        const intensity = !inside
+          ? 0
+          : dist <= proximity
+            ? 1
+            : dist <= fadeDistance
+              ? (fadeDistance - dist) / (fadeDistance - proximity)
+              : 0;
 
-    rafRef.current = requestAnimationFrame(tick);
-  }, [spotlightRadius]);
+        const lx = ((mx - rect.left) / rect.width) * 100;
+        const ly = ((my - rect.top) / rect.height) * 100;
 
-  useEffect(() => {
-    if (disableAnimations || !enableSpotlight) return;
+        card.style.setProperty("--glow-x", `${lx}%`);
+        card.style.setProperty("--glow-y", `${ly}%`);
+        card.style.setProperty("--glow-intensity", intensity.toFixed(3));
+        card.style.setProperty("--glow-radius", `${spotlightRadius}px`);
+      }
+    };
+
+    // One coalesced frame per burst of input, instead of a loop that never ends.
+    const schedule = () => {
+      if (rafRef.current === null) {
+        rafRef.current = requestAnimationFrame(update);
+      }
+    };
 
     const onMove = (e: MouseEvent) => {
       mouseRef.current = { x: e.clientX, y: e.clientY };
 
-      const section = gridRef.current?.closest(".bento-section");
-      const rect = section?.getBoundingClientRect();
+      if (!measured) measure();
+      const rect = sectionRect;
+      const wasInside = insideRef.current;
       insideRef.current =
         !!rect &&
         e.clientX >= rect.left &&
         e.clientX <= rect.right &&
         e.clientY >= rect.top &&
         e.clientY <= rect.bottom;
+
+      // Nothing to repaint while the pointer is outside and already cleared.
+      if (insideRef.current || wasInside) schedule();
     };
 
     const onLeave = () => {
+      if (!insideRef.current) return;
       insideRef.current = false;
+      schedule();
     };
 
     document.addEventListener("mousemove", onMove, { passive: true });
     document.addEventListener("mouseleave", onLeave);
-    rafRef.current = requestAnimationFrame(tick);
+    window.addEventListener("scroll", invalidate, { passive: true });
+    window.addEventListener("resize", invalidate);
 
     return () => {
       document.removeEventListener("mousemove", onMove);
       document.removeEventListener("mouseleave", onLeave);
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      window.removeEventListener("scroll", invalidate);
+      window.removeEventListener("resize", invalidate);
+      if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
     };
-  }, [disableAnimations, enableSpotlight, tick]);
+  }, [disableAnimations, enableSpotlight, spotlightRadius]);
 
   const handleClick = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {

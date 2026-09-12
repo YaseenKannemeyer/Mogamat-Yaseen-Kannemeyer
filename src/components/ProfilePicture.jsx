@@ -6,8 +6,9 @@ const ProfilePicture = () => {
       className="pb-0"
       avatarUrls={[
         {
-          imageUrl: "/assets/profilepictures/my-avatar.JPG",
-          hoverUrl: "/assets/profilepictures/my-avatar-hover.JPG",
+          imageUrl: "/assets/profilepictures/my-avatar.webp",
+          hoverUrl: "/assets/profilepictures/my-avatar-hover.webp",
+          alt: "Mogamat Yaseen Kannemeyer",
           profileUrl: "https://github.com/YaseenKannemeyer",
           showFlag: true,
         },

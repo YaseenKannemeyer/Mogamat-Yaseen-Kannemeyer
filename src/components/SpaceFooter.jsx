@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
+import { useActiveWhenVisible } from "../hooks/use-active-when-visible";
 
 const styles = `
-  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Outfit:wght@300;400;500&display=swap');
 
   .sf-footer {
     position: relative;
@@ -501,11 +501,12 @@ const CONFIG = {
 export default function SpaceFooter() {
   const canvasRef = useRef(null);
   const animRef = useRef(null);
+  const [footerRef, starfieldActive] = useActiveWhenVisible();
 
-  // Starfield
+  // Starfield — only runs while the footer is actually on screen.
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!canvas || !starfieldActive) return;
     const ctx = canvas.getContext("2d");
     let stars = [];
 
@@ -544,13 +545,13 @@ export default function SpaceFooter() {
       window.removeEventListener("resize", resize);
       cancelAnimationFrame(animRef.current);
     };
-  }, []);
+  }, [starfieldActive]);
 
   return (
     <>
       <style>{styles}</style>
 
-      <footer className="sf-footer">
+      <footer className="sf-footer" ref={footerRef}>
         <canvas
           ref={canvasRef}
           style={{
@@ -586,20 +587,16 @@ export default function SpaceFooter() {
               <nav>
                 <ul className="sf-nav-inline">
                   {CONFIG.navLinks.map((link, i) => (
-                    <>
-                      <li key={link.label}>
+                    <React.Fragment key={link.label}>
+                      <li>
                         <a href={link.href} className="sf-nav-link">
                           {link.label}
                         </a>
                       </li>
                       {i < CONFIG.navLinks.length - 1 && (
-                        <li
-                          key={`sep-${i}`}
-                          className="sf-nav-sep"
-                          aria-hidden="true"
-                        />
+                        <li className="sf-nav-sep" aria-hidden="true" />
                       )}
-                    </>
+                    </React.Fragment>
                   ))}
                 </ul>
               </nav>

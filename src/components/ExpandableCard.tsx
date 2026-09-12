@@ -1,8 +1,11 @@
 "use client";
 
 import React, { useEffect, useId, useRef, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion } from "motion/react";
 import { useOutsideClick } from "../hooks/use-outside-click";
+
+/** "/a/b.webp" -> "/a/b.avif" */
+const toAvif = (src: string) => src.replace(/\.[^.]+$/, ".avif");
 
 const CloseIcon = () => (
   <svg
@@ -34,7 +37,7 @@ const cards = [
       "Animations",
       "UI/UX",
     ],
-    src: "/assets/projectimages/cocktail-bar-project.png",
+    src: "/assets/projectimages/cocktail-bar-project.webp",
     ctaText: "View Live",
     ctaLink: "https://gsap-cocktail-lab.vercel.app/",
     githubText: "GitHub",
@@ -100,7 +103,7 @@ const cards = [
     description: "Three.js • Tween.js • 3D Interactive Gallery",
     title: "3D Rotating Art Gallery",
     tags: ["Three.js", "Tween.js", "3D", "WebGL", "JavaScript"],
-    src: "/assets/projectimages/3d-gallery-project.png",
+    src: "/assets/projectimages/3d-gallery-project.webp",
     ctaText: "View Live",
     ctaLink: "https://artwork-gallary.vercel.app/",
     githubText: "GitHub" as string | undefined,
@@ -179,7 +182,7 @@ const cards = [
     description: "Next.js • Framer Motion • TypeScript",
     title: "Framer Motion — React Animation Blog",
     tags: ["Next.js", "React", "TypeScript", "Tailwind CSS"],
-    src: "/assets/projectimages/framer-motion-project.png",
+    src: "/assets/projectimages/framer-motion-project.webp",
     ctaText: "View Live",
     ctaLink: "https://framer-motion-react-beta.vercel.app/",
     githubText: "GitHub" as string | undefined,
@@ -209,7 +212,7 @@ const cards = [
     description: "Next.js • React Hooks Learning Platform",
     title: "How To React Hooks",
     tags: ["Next.js", "React", "TypeScript", "Tailwind CSS"],
-    src: "/assets/projectimages/hooks-project.png",
+    src: "/assets/projectimages/hooks-project.webp",
     ctaText: "View Live",
     ctaLink: "https://how-to-react-hooks.vercel.app/",
     githubText: "GitHub" as string | undefined,
@@ -236,7 +239,7 @@ const cards = [
     description: "Java Swing • Apache Derby • Desktop App",
     title: "CampusCompanion",
     tags: ["Java", "Java Swing", "Apache Derby"],
-    src: "/assets/projectimages/campus-companion.png",
+    src: "/assets/projectimages/campus-companion.webp",
     ctaText: "GitHub",
     ctaLink: "https://github.com/YaseenKannemeyer/CampusCompanion",
     githubText: undefined as string | undefined,
@@ -259,7 +262,7 @@ const cards = [
     description: "UI/UX Design • Figma • Mobile App Redesign",
     title: "MyCiTi Bus App — UX Redesign Case Study",
     tags: ["Figma", "UI/UX", "Mobile Design", "User Research"],
-    src: "/assets/projectimages/myciti-redesign.png",
+    src: "/assets/projectimages/myciti-redesign.webp",
 
     ctaText: "Prototype",
     ctaLink:
@@ -379,13 +382,17 @@ export function ExpandableCard({
               </motion.button>
 
               <motion.div layoutId={`image-${active.title}-${id}`}>
-                <img
-                  width={200}
-                  height={200}
-                  src={active.src}
-                  alt={active.title}
-                  className="w-full h-56 sm:h-80 sm:rounded-tr-lg sm:rounded-tl-lg object-contain bg-neutral-100 dark:bg-neutral-800"
-                />
+                <picture>
+                  <source srcSet={toAvif(active.src)} type="image/avif" />
+                  <img
+                    width={200}
+                    height={200}
+                    src={active.src}
+                    alt={active.title}
+                    decoding="async"
+                    className="w-full h-56 sm:h-80 sm:rounded-tr-lg sm:rounded-tl-lg object-contain bg-neutral-100 dark:bg-neutral-800"
+                  />
+                </picture>
               </motion.div>
 
               <div>
@@ -410,7 +417,7 @@ export function ExpandableCard({
                       <a
                         href={active.ctaLink}
                         target="_blank"
-                        rel="noreferrer"
+                        rel="noopener noreferrer"
                         className="px-4 py-2 text-sm rounded-full font-bold bg-blue-500 text-white hover:bg-blue-600 transition-colors flex items-center justify-center text-center"
                       >
                         {active.ctaText}
@@ -420,7 +427,7 @@ export function ExpandableCard({
                       <a
                         href={active.githubLink}
                         target="_blank"
-                        rel="noreferrer"
+                        rel="noopener noreferrer"
                         className="px-4 py-2 text-sm rounded-full font-bold bg-neutral-800 border border-neutral-600 text-neutral-300 hover:border-neutral-400 hover:text-white transition-colors flex items-center justify-center text-center"
                       >
                         {active.githubText}
@@ -466,13 +473,18 @@ export function ExpandableCard({
                 >
                   <div className="flex gap-4 flex-col md:flex-row">
                     <motion.div layoutId={`image-${card.title}-${id}`}>
-                      <img
-                        width={100}
-                        height={100}
-                        src={card.src}
-                        alt={card.title}
-                        className="h-40 w-full md:h-14 md:w-14 rounded-lg object-cover object-top"
-                      />
+                      <picture>
+                        <source srcSet={toAvif(card.src)} type="image/avif" />
+                        <img
+                          width={100}
+                          height={100}
+                          src={card.src}
+                          alt={card.title}
+                          loading="lazy"
+                          decoding="async"
+                          className="h-40 w-full md:h-14 md:w-14 rounded-lg object-cover object-top"
+                        />
+                      </picture>
                     </motion.div>
                     <div>
                       <motion.h3
@@ -498,7 +510,7 @@ export function ExpandableCard({
                       <a
                         href={card.ctaLink}
                         target="_blank"
-                        rel="noreferrer"
+                        rel="noopener noreferrer"
                         className="px-4 py-2 text-sm rounded-full font-bold bg-blue-500 text-white hover:bg-blue-600 transition-colors"
                       >
                         {card.ctaText}
@@ -508,7 +520,7 @@ export function ExpandableCard({
                       <a
                         href={card.githubLink}
                         target="_blank"
-                        rel="noreferrer"
+                        rel="noopener noreferrer"
                         className="px-4 py-2 text-sm rounded-full font-bold bg-neutral-800 border border-neutral-600 text-neutral-300 hover:border-neutral-400 hover:text-white transition-colors"
                       >
                         {card.githubText}

@@ -196,7 +196,9 @@ export default function Galaxy({
   autoCenterRepulsion = 0,
   transparent = true,
 }: GalaxyProps) {
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(
+    () => window.matchMedia("(max-width: 768px)").matches,
+  );
   const ctnRef = useRef<HTMLDivElement>(null);
   const targetMouse = useRef({ x: 0.5, y: 0.5 });
   const smoothMouse = useRef({ x: 0.5, y: 0.5 });
@@ -246,41 +248,10 @@ export default function Galaxy({
   // Mobile detection
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 768px)");
-    setIsMobile(mq.matches);
     const h = (e: MediaQueryListEvent) => setIsMobile(e.matches);
     mq.addEventListener("change", h);
     return () => mq.removeEventListener("change", h);
   }, []);
-
-  useEffect(() => {
-    if (isMobile || !ctnRef.current) return;
-    const ctn = ctnRef.current;
-
-    let cleanup: (() => void) | null = null;
-
-    // Don't spin up WebGL until the section is actually on screen.
-    // threshold:0 fires as soon as 1px is visible; rootMargin pre-loads
-    // 200px before the section enters the viewport so there's no cold-start flash.
-    const io = new IntersectionObserver(
-      (entries) => {
-        const visible = entries[0].isIntersecting;
-        if (visible && !cleanup) {
-          cleanup = startGL(ctn);
-        } else if (!visible && cleanup) {
-          cleanup();
-          cleanup = null;
-        }
-      },
-      { rootMargin: "200px 0px", threshold: 0 },
-    );
-    io.observe(ctn);
-
-    return () => {
-      io.disconnect();
-      cleanup?.();
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isMobile, transparent]);
 
   // All WebGL setup extracted into a plain function so IntersectionObserver
   // can call it lazily and the cleanup returned from useEffect stays simple.
@@ -431,6 +402,36 @@ export default function Galaxy({
       gl.getExtension("WEBGL_lose_context")?.loseContext();
     };
   }
+
+  useEffect(() => {
+    if (isMobile || !ctnRef.current) return;
+    const ctn = ctnRef.current;
+
+    let cleanup: (() => void) | null = null;
+
+    // Don't spin up WebGL until the section is actually on screen.
+    // threshold:0 fires as soon as 1px is visible; rootMargin pre-loads
+    // 200px before the section enters the viewport so there's no cold-start flash.
+    const io = new IntersectionObserver(
+      (entries) => {
+        const visible = entries[0].isIntersecting;
+        if (visible && !cleanup) {
+          cleanup = startGL(ctn);
+        } else if (!visible && cleanup) {
+          cleanup();
+          cleanup = null;
+        }
+      },
+      { rootMargin: "200px 0px", threshold: 0 },
+    );
+    io.observe(ctn);
+
+    return () => {
+      io.disconnect();
+      cleanup?.();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isMobile, transparent]);
 
   return (
     <div

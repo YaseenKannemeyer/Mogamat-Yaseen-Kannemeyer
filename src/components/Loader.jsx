@@ -1,8 +1,6 @@
-import Galaxy from "./GalaxyBackground";
-
 const MissionPatch = () => (
   <svg
-    className="sf-patch"
+    className="loader-patch"
     viewBox="0 0 72 72"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
@@ -132,35 +130,28 @@ const MissionPatch = () => (
   </svg>
 );
 
-export default function Loader({ fadeOut }) {
+export default function Loader({ fadeOut, progress = 0 }) {
   return (
     <div
       className={`loader-screen fixed inset-0 z-50 overflow-hidden bg-black transition-opacity duration-500 ${
         fadeOut ? "opacity-0 pointer-events-none" : "opacity-100"
       }`}
+      role="status"
+      aria-live="polite"
+      aria-label="Loading portfolio"
     >
-      {/* Background */}
-      <Galaxy
-        className="absolute inset-0 z-0 h-full w-full"
-        starSpeed={0.2}
-        density={0.3}
-        hueShift={0}
-        speed={0.2}
-        glowIntensity={0.3}
-        saturation={0}
-        mouseRepulsion={false}
-        repulsionStrength={5}
-        twinkleIntensity={0.5}
-        rotationSpeed={0.1}
-        transparent
-      />
+      <div className="loader-starfield" aria-hidden="true" />
 
       {/* Loader Content */}
       <div className="relative z-10 flex h-full flex-col items-center justify-center">
         <MissionPatch />
-        <h2 className="loader-title m-5">INITIALIZING</h2>
+        {/* A <p>, not a heading: this must not become the page's first heading. */}
+        <p className="loader-title m-5">INITIALIZING</p>
         <div className="loader-bar">
-          <div className="loader-progress" />
+          <div
+            className="loader-progress"
+            style={{ "--loader-progress": progress }}
+          />
         </div>
       </div>
     </div>

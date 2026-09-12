@@ -99,7 +99,7 @@ const Navbar = () => {
   }, [isOpen]);
 
   return (
-    <div
+    <header
       ref={navRef}
       className="fixed inset-x-0 z-30 w-full backdrop-blur-lg bg-primary/30 mobile-glow-bar"
     >
@@ -119,11 +119,17 @@ const Navbar = () => {
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="flex cursor-pointer text-neutral-400 hover:text-white focus:outline-none sm:hidden mobile-glow-icon"
+            aria-label={isOpen ? "Close menu" : "Open menu"}
+            aria-expanded={isOpen}
+            aria-controls="mobile-menu"
           >
             <img
-              src={isOpen ? "assets/close.svg" : "assets/menu.svg"}
+              src={isOpen ? "/assets/close.svg" : "/assets/menu.svg"}
               className="w-6 h-6"
-              alt="toggle"
+              width={24}
+              height={24}
+              alt=""
+              aria-hidden="true"
             />
           </button>
 
@@ -135,6 +141,7 @@ const Navbar = () => {
 
       {isOpen && (
         <motion.div
+          id="mobile-menu"
           className="block overflow-hidden text-center sm:hidden"
           initial={{ opacity: 0, x: -10 }}
           animate={{ opacity: 1, x: 0 }}
@@ -146,7 +153,7 @@ const Navbar = () => {
           </nav>
         </motion.div>
       )}
-    </div>
+    </header>
   );
 };
 

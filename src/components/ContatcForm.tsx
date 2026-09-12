@@ -385,6 +385,7 @@ export function ContactForm() {
               target="_blank"
               rel="noopener noreferrer"
               title={s.label}
+              aria-label={s.label}
               className={cn(
                 "text-neutral-600 transition-colors duration-200",
                 s.color,
@@ -494,6 +495,7 @@ export function ContactForm() {
                 target="_blank"
                 rel="noopener noreferrer"
                 title={s.label}
+                aria-label={s.label}
                 className={cn(
                   "text-neutral-700 transition-colors duration-200",
                   s.color,

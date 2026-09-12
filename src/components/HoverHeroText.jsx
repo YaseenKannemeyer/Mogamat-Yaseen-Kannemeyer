@@ -50,14 +50,20 @@ const HoverHeroText = () => {
         pt-4
       "
     >
-      {sentences.map((sentence, index) => (
-        <p
-          key={index}
-          className={clsx("text-center max-w-4xl", sentenceClasses[index])}
-        >
-          {sentence}
-        </p>
-      ))}
+      {sentences.map((sentence, index) => {
+        // The name is the page's most important keyword, so the first line is
+        // the single <h1>. Tailwind Preflight zeroes heading margins and
+        // inherits font-size, so this renders identically to the old <p>.
+        const Tag = index === 0 ? "h1" : "p";
+        return (
+          <Tag
+            key={index}
+            className={clsx("text-center max-w-4xl", sentenceClasses[index])}
+          >
+            {sentence}
+          </Tag>
+        );
+      })}
     </div>
   );
 };

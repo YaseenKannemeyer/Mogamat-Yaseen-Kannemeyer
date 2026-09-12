@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { cn } from "../lib/utils";
@@ -9,7 +8,11 @@ interface Avatar {
   profileUrl: string;
   hoverUrl?: string;
   showFlag?: boolean;
+  alt?: string;
 }
+
+/** "/a/b.webp" -> "/a/b.avif" */
+const toAvif = (src: string) => src.replace(/\.[^.]+$/, ".avif");
 
 interface AvatarCirclesProps {
   className?: string;
@@ -25,6 +28,11 @@ export const AvatarCircles = ({
   sizeClass = "h-10 w-10",
 }: AvatarCirclesProps) => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  // Once hovered, the back face stays mounted so it never unmounts mid-flip.
+  const [primed, setPrimed] = useState<Set<number>>(new Set());
+
+  const prime = (index: number) =>
+    setPrimed((prev) => (prev.has(index) ? prev : new Set(prev).add(index)));
 
   return (
     <div
@@ -39,7 +47,11 @@ export const AvatarCircles = ({
           rel="noopener noreferrer"
           className="relative inline-block flex-shrink-0"
           style={{ perspective: "600px" }}
-          onMouseEnter={() => setHoveredIndex(index)}
+          onMouseEnter={() => {
+            prime(index);
+            setHoveredIndex(index);
+          }}
+          onFocus={() => prime(index)}
           onMouseLeave={() => setHoveredIndex(null)}
         >
           {/* Flip container */}
@@ -57,32 +69,15 @@ export const AvatarCircles = ({
             }}
           >
             {/* Front face — default image */}
-            <img
-              src={url.imageUrl}
-              alt={`Avatar ${index + 1}`}
-              className={cn(
-                "rounded-full border-2 border-white dark:border-gray-800 object-cover",
-                sizeClass,
-              )}
-              style={{
-                backfaceVisibility: "hidden",
-                WebkitBackfaceVisibility: "hidden",
-                position: "absolute",
-                top: 0,
-                left: 0,
-                width: "100%",
-                height: "100%",
-                minWidth: 0,
-                minHeight: 0,
-                flexShrink: 0,
-              }}
-            />
-
-            {/* Back face — hover image */}
-            {url.hoverUrl && (
+            <picture>
+              <source srcSet={toAvif(url.imageUrl)} type="image/avif" />
               <img
-                src={url.hoverUrl}
-                alt={`Avatar Back ${index + 1}`}
+                src={url.imageUrl}
+                alt={url.alt ?? ""}
+                width={128}
+                height={128}
+                decoding="async"
+                fetchPriority="high"
                 className={cn(
                   "rounded-full border-2 border-white dark:border-gray-800 object-cover",
                   sizeClass,
@@ -90,7 +85,6 @@ export const AvatarCircles = ({
                 style={{
                   backfaceVisibility: "hidden",
                   WebkitBackfaceVisibility: "hidden",
-                  transform: "rotateY(180deg)",
                   position: "absolute",
                   top: 0,
                   left: 0,
@@ -101,6 +95,39 @@ export const AvatarCircles = ({
                   flexShrink: 0,
                 }}
               />
+            </picture>
+
+            {/* Back face — only fetched once the card has been hovered. The
+                1.2s flip fully covers decode, so the swap is never visible. */}
+            {url.hoverUrl && primed.has(index) && (
+              <picture>
+                <source srcSet={toAvif(url.hoverUrl)} type="image/avif" />
+                <img
+                  src={url.hoverUrl}
+                  alt=""
+                  aria-hidden="true"
+                  width={128}
+                  height={128}
+                  decoding="async"
+                  className={cn(
+                    "rounded-full border-2 border-white dark:border-gray-800 object-cover",
+                    sizeClass,
+                  )}
+                  style={{
+                    backfaceVisibility: "hidden",
+                    WebkitBackfaceVisibility: "hidden",
+                    transform: "rotateY(180deg)",
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    width: "100%",
+                    height: "100%",
+                    minWidth: 0,
+                    minHeight: 0,
+                    flexShrink: 0,
+                  }}
+                />
+              </picture>
             )}
           </div>
 
