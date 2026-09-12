@@ -502,6 +502,7 @@ export function ExpandableCard({
                     </div>
                   </div>
 
+
                   <div
                     className="flex gap-2 mt-4 md:mt-0"
                     onClick={(e) => e.stopPropagation()}
@@ -547,6 +548,21 @@ export function ExpandableCard({
           </>
         )}
       </ul>
+
+      {/* The same write-ups the modal shows, rendered into the DOM so search
+          engines can read them. Collapsed like an accordion — identical content,
+          revealed by opening a card. Iterates every project (not the filtered or
+          sliced list) so what is crawlable never depends on UI state. */}
+      <div className="hidden">
+        {cards.map((card) => (
+          <article key={`seo-${card.title}`}>
+            <h3>{card.title}</h3>
+            <p>{card.description}</p>
+            <p>Built with: {card.tags.join(", ")}</p>
+            {typeof card.content === "function" ? card.content() : card.content}
+          </article>
+        ))}
+      </div>
     </>
   );
 }

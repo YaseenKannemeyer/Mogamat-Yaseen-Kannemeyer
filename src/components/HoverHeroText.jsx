@@ -9,7 +9,7 @@ const HoverHeroText = () => {
       Hi, I'm{" "}
       <span className="text-blue-200 font-bold">Yaseen Kannemeyer</span>{" "}
     </>,
-    "A software developer from South Africa, interested in front-end development and UI/UX design.",
+    "A front-end developer based in Cape Town, South Africa, focused on React, TypeScript and UI/UX design.",
     <>
       I build with <span className="text-blue-200 font-semibold">React</span>{" "}
       and <span className="text-blue-200 font-semibold">Tailwind CSS</span>, and
