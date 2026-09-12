@@ -418,7 +418,7 @@ export function ExpandableCard({
                         href={active.ctaLink}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="px-4 py-2 text-sm rounded-full font-bold bg-blue-500 text-white hover:bg-blue-600 transition-colors flex items-center justify-center text-center"
+                        className="px-4 py-2 text-sm rounded-full font-bold bg-blue-600 text-white hover:bg-blue-700 transition-colors flex items-center justify-center text-center"
                       >
                         {active.ctaText}
                       </a>
@@ -458,9 +458,9 @@ export function ExpandableCard({
       {/* Card List */}
       <ul className="max-w-2xl mx-auto w-full gap-4">
         {filtered.length === 0 ? (
-          <p className="text-neutral-500 font-mono text-sm text-center py-10">
+          <li className="text-neutral-500 font-mono text-sm text-center py-10 list-none">
             No projects match your search.
-          </p>
+          </li>
         ) : (
           <>
             <AnimatePresence>
@@ -511,7 +511,7 @@ export function ExpandableCard({
                         href={card.ctaLink}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="px-4 py-2 text-sm rounded-full font-bold bg-blue-500 text-white hover:bg-blue-600 transition-colors"
+                        className="px-4 py-2 text-sm rounded-full font-bold bg-blue-600 text-white hover:bg-blue-700 transition-colors"
                       >
                         {card.ctaText}
                       </a>
@@ -532,17 +532,17 @@ export function ExpandableCard({
             </AnimatePresence>
             {/* View All Button */}
             {filtered.length > 5 && !showAll && (
-              <div className="flex justify-center mt-4">
+              <li className="flex justify-center mt-4 list-none">
                 <motion.button
                   layout
-                  className="px-6 py-2 bg-blue-500 text-white rounded-full font-bold hover:bg-blue-600 transition-colors"
+                  className="px-6 py-2 bg-blue-600 text-white rounded-full font-bold hover:bg-blue-700 transition-colors"
                   onClick={() => setShowAll(true)}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
                   View All
                 </motion.button>
-              </div>
+              </li>
             )}
           </>
         )}

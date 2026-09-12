@@ -56,6 +56,8 @@ const TechStack = () => {
               <div className="absolute inset-0 rounded-full blur-md opacity-30 group-hover:opacity-70 transition duration-300 bg-current" />
 
               <Icon
+                aria-hidden="true"
+                focusable="false"
                 className={`relative w-10 h-10 ${color}
                 transition-all duration-300
                 group-hover:scale-125

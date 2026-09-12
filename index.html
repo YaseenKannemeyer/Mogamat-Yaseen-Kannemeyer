@@ -261,22 +261,16 @@
     <!-- ═══════════════════════════════════════════════
          FONTS
     ═══════════════════════════════════════════════ -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <!-- Single non-blocking request for all three families. Previously this was
-         four separate round-trips, two of them render-blocking CSS @imports. -->
+    <!-- Fonts are self-hosted (see @font-face in src/index.css), so there are no
+         third-party font requests at all. Funnel Display renders the LCP text,
+         so it is preloaded; the rest load normally. -->
     <link
       rel="preload"
-      as="style"
-      href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&family=Orbitron:wght@400;500;600;700&family=Outfit:wght@300;400;500&display=swap"
-      onload="this.onload=null;this.rel='stylesheet'"
+      as="font"
+      type="font/woff2"
+      href="/fonts/funnel-display-latin.woff2"
+      crossorigin
     />
-    <noscript>
-      <link
-        rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&family=Orbitron:wght@400;500;600;700&family=Outfit:wght@300;400;500&display=swap"
-      />
-    </noscript>
 
     <!-- LCP layer of the hero parallax -->
     <link

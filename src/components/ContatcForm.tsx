@@ -269,7 +269,7 @@ const Field = ({
   className?: string;
 }) => (
   <div className={cn("flex flex-col gap-1.5", className)}>
-    <span className="text-[10.5px] font-semibold uppercase tracking-[0.18em] text-neutral-500">
+    <span className="text-[10.5px] font-semibold uppercase tracking-[0.18em] text-neutral-400">
       {label}
     </span>
     {children}
@@ -484,8 +484,8 @@ export function ContactForm() {
         </motion.button>
 
         <div className="flex items-center justify-between pt-0.5">
-          <p className="text-[11px] text-neutral-700">
-            Delivered via <span className="text-neutral-600">EmailJS</span>
+          <p className="text-[11px] text-neutral-400">
+            Delivered via <span className="text-neutral-300">EmailJS</span>
           </p>
           <div className="flex items-center gap-3">
             {SOCIALS.map((s) => (

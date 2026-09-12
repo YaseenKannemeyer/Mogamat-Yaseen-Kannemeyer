@@ -70,9 +70,11 @@ const Projects = () => {
                 setSearchOpen((prev) => !prev);
                 if (searchOpen) setSearch("");
               }}
+              aria-label={searchOpen ? "Close project search" : "Search projects"}
+              aria-expanded={searchOpen}
               className={`p-2 rounded-xl border transition-colors ${
                 searchOpen
-                  ? "bg-blue-500 border-blue-500 text-white"
+                  ? "bg-blue-600 border-blue-600 text-white"
                   : "bg-neutral-900 border-neutral-700 text-neutral-400 hover:border-blue-500 hover:text-blue-400"
               }`}
             >
@@ -121,7 +123,7 @@ const Projects = () => {
               onClick={() => setActiveTag(tag)}
               className={`px-3 py-1 rounded-full text-xs font-mono border transition-all duration-200 ${
                 activeTag === tag
-                  ? "bg-blue-500 border-blue-500 text-white shadow-[0_0_12px_rgba(59,130,246,0.5)]"
+                  ? "bg-blue-600 border-blue-600 text-white shadow-[0_0_12px_rgba(59,130,246,0.5)]"
                   : "bg-transparent border-neutral-700 text-neutral-400 hover:border-blue-500 hover:text-blue-400"
               }`}
             >

@@ -608,6 +608,7 @@ export default function SpaceFooter() {
                 href={CONFIG.github}
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="GitHub"
                 className="sf-social-btn"
               >
                 <GitHubIcon />
@@ -617,12 +618,17 @@ export default function SpaceFooter() {
                 href={CONFIG.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="LinkedIn"
                 className="sf-social-btn"
               >
                 <LinkedInIcon />
                 <span>LinkedIn</span>
               </a>
-              <a href={`mailto:${CONFIG.email}`} className="sf-social-btn">
+              <a
+                href={`mailto:${CONFIG.email}`}
+                aria-label="Email"
+                className="sf-social-btn"
+              >
                 <EmailIcon />
                 <span>Email</span>
               </a>
